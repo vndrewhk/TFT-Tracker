@@ -3,14 +3,16 @@ import { Button } from "@mui/material";
 const NewSummoner = (props) => {
   const fetchSummoner = async () => {
     console.log("prefetch");
-    const response = await fetch("/api/tft_fetch", {
-      method: "POST",
-    });
+    try {
+      const response = await fetch("/api/tft_fetch");
 
-    console.log("postfetch");
+      console.log("postfetch");
 
-    const data = await response.json();
-    console.log(data);
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
