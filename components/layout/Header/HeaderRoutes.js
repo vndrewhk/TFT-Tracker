@@ -17,6 +17,7 @@ const HeaderRoutes = () => {
           fontFamily:
             'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;',
           backgroundColor: "#1ad1b9",
+          marginRight: "5px",
         }}
         variant="contained"
       >
@@ -33,6 +34,7 @@ const HeaderRoutes = () => {
           fontFamily:
             'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;',
           backgroundColor: "#1ad1b9",
+          marginRight: "5px",
         }}
         variant="contained"
       >
@@ -49,6 +51,7 @@ const HeaderRoutes = () => {
           fontFamily:
             'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;',
           backgroundColor: "#1ad1b9",
+          marginRight: "5px",
         }}
         variant="contained"
       >
