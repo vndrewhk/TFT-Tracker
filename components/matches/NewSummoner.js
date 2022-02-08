@@ -1,10 +1,13 @@
 import { Button } from "@mui/material";
 
 const NewSummoner = (props) => {
-  const fetchSummoner = async () => {
+  const fetchSummoner = async (summonerName) => {
+    summonerName = "Voidlapse";
     console.log("prefetch");
     try {
-      const response = await fetch("/api/tft_fetch");
+      const response = await fetch(
+        `/api/summoner_fetch?summonerName=${summonerName}`
+      );
 
       console.log("postfetch");
 
@@ -16,7 +19,9 @@ const NewSummoner = (props) => {
   };
   return (
     <>
-      <Button onClick={fetchSummoner}>Click to fetch</Button>
+      <Button variant="contained" onClick={fetchSummoner}>
+        Click to fetch
+      </Button>
     </>
   );
 };
