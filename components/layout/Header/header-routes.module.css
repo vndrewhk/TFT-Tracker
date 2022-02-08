@@ -1,0 +1,24 @@
+.header-button {
+    margin-right: 15px;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    background-color: #1ad1b9;
+    color:rgb(0, 0, 0)
+    
+  }
+  .header-button:hover{
+    background-color: #3d9185;
+    color:rgb(214, 214, 214)
+  }
+  
+  .header-button:active{
+    background-color: red;
+  }
+  
+  .route-button{
+    padding-right: 10px;
+  }
+  
+  .Button:hover{
+    background-color: #3d9185;
+    color:rgb(214, 214, 214)
+  }
