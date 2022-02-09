@@ -1,5 +1,5 @@
 const SummonerFetch = async (req, res) => {
-  let apiKey = "RGAPI-b9c62b31-effc-4236-a30a-24a3d55545e3";
+  let apiKey = "RGAPI-74d28b70-58e7-4615-bc75-db3cb1cb73af";
   let URL = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-name/";
   let requestURL;
 
@@ -13,10 +13,13 @@ const SummonerFetch = async (req, res) => {
 
   let summonerName = req.query.summonerName;
   let requestType = req.query.requestType;
+  let region = req.query.region.toLowerCase();
   // console.log("fetch file triggered");
 
   // // if (req.method === "GET") {
+  URL = `https://${region}.api.riotgames.com/tft/summoner/v1/summoners/by-name/`;
   requestURL = `${URL}${summonerName}`;
+
   // requestURL = `${URL}Voidlapse`;
   // summonerName = req.body.summonerName;
   try {
