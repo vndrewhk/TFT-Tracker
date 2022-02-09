@@ -29,8 +29,11 @@ const NewSummoner = (props) => {
     }
   };
 
+  //if url is /summonerName/matches then call this fn
+
   const fetchMatches = async () => {
-    // e.preventDefault();
+    //useEffect to fetch the summoner info so i dont have to call the summonerId
+    //  every single time i call the match info
     const data = await fetchSummoner();
     setSummonerInfo(data);
     try {
@@ -40,7 +43,6 @@ const NewSummoner = (props) => {
     } catch (err) {
       console.log(err);
     }
-    // setMatchInfo(matches);
   };
 
   const logId = () => {

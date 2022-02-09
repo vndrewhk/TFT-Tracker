@@ -3,6 +3,14 @@ const SummonerFetch = async (req, res) => {
   let URL = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-name/";
   let requestURL;
 
+  //could make a prefix as the urls are similar
+  //api prefix up to tft is the same
+  //environment variable file
+  //its like plugging variables into the application
+  //key service, encrypted somewhere, on deployment time, injected into application
+
+  //make a helper function and then pass in common parameters based off of that
+
   let summonerName = req.query.summonerName;
   let requestType = req.query.requestType;
   // console.log("fetch file triggered");
@@ -24,12 +32,8 @@ const SummonerFetch = async (req, res) => {
     }
     if (responseData.ok) {
       const data = await responseData.json();
- 
 
-      console.log(data);
       res.status(200).json({ data });
-      // res.status(200).json({requestType})
-      return data;
     }
   } catch (err) {
     res.status(200).json({ message: "err" });

@@ -5,6 +5,8 @@ const TFTMatches = async (req, res) => {
   let summonerId = req.query.summonerId;
   requestURL = `${URL}${summonerId}`;
 
+
+
   try {
     const responseData = await fetch(requestURL, {
       headers: {
@@ -18,12 +20,12 @@ const TFTMatches = async (req, res) => {
     }
     if (responseData.ok) {
       const matchInfo = await responseData.json();
- 
 
-      console.log(matchInfo);
+      //res status is the one that returns the info
+
       res.status(200).json({ matchInfo });
       // res.status(200).json({requestType})
-      return matchInfo;
+      //return matchInfo doesnt do anything
     }
   } catch (err) {
     res.status(200).json({ message: "err" });
