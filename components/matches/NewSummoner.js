@@ -29,7 +29,7 @@ const NewSummoner = (props) => {
 
   //this grabs the summoner ID which can be used to process info
   const fetchSummoner = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await fetch(
         `/api/summoner_fetch?region=${region}&summonerName=${summonerName}`
@@ -38,13 +38,13 @@ const NewSummoner = (props) => {
 
       console.log(data.data);
       console.log("fetched");
-      setIsLoading(false)
+      setIsLoading(false);
       return data.data;
     } catch (err) {
-      setIsLoading(false)
+      setIsLoading(false);
       console.log(err);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   //if url is /summonerName/matches then call this fn
@@ -55,7 +55,9 @@ const NewSummoner = (props) => {
     const data = await fetchSummoner();
     setSummonerInfo(data);
     try {
-      const matches = await fetch(`/api/tft_matches?summonerId=${data.id}`);
+      const matches = await fetch(
+        `/api/tft_matches?region=${region}&summonerId=${data.id}`
+      );
       const matchData = await matches.json();
       setMatchInfo(matchData);
     } catch (err) {
@@ -122,7 +124,7 @@ const NewSummoner = (props) => {
       <Button variant="contained" onClick={summonerBlurHandler}>
         Click to record summoner name
       </Button>
-      {isLoading&&<h1>Loading...</h1>}
+      {isLoading && <h1>Loading...</h1>}
     </>
   );
 };
