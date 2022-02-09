@@ -68,7 +68,7 @@ const NewSummoner = (props) => {
         Click to fetch AGAIN
       </Button>
       <Button variant="contained" onClick={logId}>
-        Click to log current ID
+        Click to log current info
       </Button>
     </>
   );
