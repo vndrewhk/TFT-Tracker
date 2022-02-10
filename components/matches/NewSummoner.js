@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import HyperRollStats from "./HyperRollStats";
 import RankedStats from "./RankedStats";
 
@@ -16,11 +16,12 @@ const NewSummoner = (props) => {
   const [summonerInfo, setSummonerInfo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [matchInfo, setMatchInfo] = useState("");
+  const [matchInfo, setMatchInfo] = useState({ matchInfo: [{}] });
   const [region, setRegion] = useState("NA1");
+  const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
+  const [hyperRollInfo, setHyperRollInfo] = useState(null);
 
   const summonerRef = useRef();
-  const regionRef = useRef();
 
   const summonerBlurHandler = () => {
     setSummonerName(summonerRef.current.value);
@@ -74,12 +75,41 @@ const NewSummoner = (props) => {
     summonerBlurHandler();
   }, []);
 
+  const assignRankedInfo = useCallback(() => {
+    let rankedFiltered = matchInfo.matchInfo.filter(function (obj) {
+      return obj.queueType === "RANKED_TFT";
+    });
+    setRankedTFTInfo(rankedFiltered[0]);
+  }, [matchInfo.matchInfo]);
+
+  const assignHyperRollInfo = useCallback(() => {
+    let hyperRollFiltered = matchInfo.matchInfo.filter(function (obj) {
+      return obj.queueType === "RANKED_TFT_TURBO";
+    });
+    setHyperRollInfo(hyperRollFiltered[0]);
+  }, [matchInfo.matchInfo]);
+
+  const assignInfo = () => {
+    assignHyperRollInfo();
+    assignRankedInfo();
+  };
+
   const logId = () => {
     console.log(summonerName);
     console.log(region);
     console.log(summonerInfo);
     console.log(matchInfo.matchInfo);
+    console.log(rankedTFTInfo);
+    console.log(hyperRollInfo);
   };
+
+  useEffect(() => {
+    assignHyperRollInfo();
+  }, [assignHyperRollInfo, matchInfo]);
+
+  useEffect(() => {
+    assignRankedInfo();
+  }, [assignRankedInfo, matchInfo]);
 
   return (
     <>
@@ -129,20 +159,20 @@ const NewSummoner = (props) => {
       <Button variant="contained" onClick={summonerBlurHandler}>
         Click to record summoner name
       </Button>
+      <Button variant="contained" onClick={assignInfo}>
+        Click to assign INFO
+      </Button>
       {isLoading && <h1>Loading...</h1>}
 
-      {/* {success && (
-       <>  <RankedStats
-       // summonerName={summonerInfo.name}
-       // queueType={matchInfo.matchInfo[1].queueType}
-       // tier = {matchInfo.matchInfo[1].tier}
-       // rank = {matchInfo.matchInfo[1].rank}
-       // rating = {matchInfo.matchInfo[1].leaguePoints}
-       matchInfo={matchInfo.matchInfo[1]}
-     ></RankedStats> <HyperRollStats matchInfo={matchInfo.matchInfo[0]}></HyperRollStats> 
-     </> )} */}
+      {/* need to add conditional rendering here, cannot assume the player has played ranked queues */}
+      {/* use filter or map to separate them */}
 
-     
+      {success && rankedTFTInfo && (
+        <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
+      )}
+      {success && hyperRollInfo && (
+        <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
+      )}
     </>
   );
 };
