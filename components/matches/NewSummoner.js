@@ -8,11 +8,14 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
+import HyperRollStats from "./HyperRollStats";
+import RankedStats from "./RankedStats";
 
 const NewSummoner = (props) => {
   const [summonerName, setSummonerName] = useState("");
   const [summonerInfo, setSummonerInfo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [matchInfo, setMatchInfo] = useState("");
   const [region, setRegion] = useState("NA1");
 
@@ -60,7 +63,9 @@ const NewSummoner = (props) => {
       );
       const matchData = await matches.json();
       setMatchInfo(matchData);
+      setSuccess(true);
     } catch (err) {
+      setSuccess(false);
       console.log(err);
     }
   };
@@ -73,7 +78,7 @@ const NewSummoner = (props) => {
     console.log(summonerName);
     console.log(region);
     console.log(summonerInfo);
-    console.log(matchInfo);
+    console.log(matchInfo.matchInfo);
   };
 
   return (
@@ -125,6 +130,19 @@ const NewSummoner = (props) => {
         Click to record summoner name
       </Button>
       {isLoading && <h1>Loading...</h1>}
+
+      {/* {success && (
+       <>  <RankedStats
+       // summonerName={summonerInfo.name}
+       // queueType={matchInfo.matchInfo[1].queueType}
+       // tier = {matchInfo.matchInfo[1].tier}
+       // rank = {matchInfo.matchInfo[1].rank}
+       // rating = {matchInfo.matchInfo[1].leaguePoints}
+       matchInfo={matchInfo.matchInfo[1]}
+     ></RankedStats> <HyperRollStats matchInfo={matchInfo.matchInfo[0]}></HyperRollStats> 
+     </> )} */}
+
+     
     </>
   );
 };
