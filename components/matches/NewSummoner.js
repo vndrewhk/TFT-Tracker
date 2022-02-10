@@ -21,6 +21,8 @@ const NewSummoner = (props) => {
   const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
 
+  const [summonerFound, setSummonerFound] = useState(false);
+
   const summonerRef = useRef();
 
   const summonerBlurHandler = () => {
@@ -34,6 +36,9 @@ const NewSummoner = (props) => {
   //this grabs the summoner ID which can be used to process info
   const fetchSummoner = async () => {
     setIsLoading(true);
+    setRankedTFTInfo(null);
+    setHyperRollInfo(null);
+    setMatchInfo({ matchInfo: [{}] });
     try {
       const response = await fetch(
         `/api/summoner_fetch?region=${region}&summonerName=${summonerName}`
@@ -41,8 +46,13 @@ const NewSummoner = (props) => {
       const data = await response.json();
 
       console.log(data.data);
+      setSummonerFound(true);
+      if (!data.data) {
+        setSummonerFound(false);
+      }
       console.log("fetched");
       setIsLoading(false);
+
       return data.data;
     } catch (err) {
       setIsLoading(false);
@@ -101,6 +111,7 @@ const NewSummoner = (props) => {
     console.log(matchInfo.matchInfo);
     console.log(rankedTFTInfo);
     console.log(hyperRollInfo);
+    console.log(success);
   };
 
   useEffect(() => {
@@ -167,11 +178,20 @@ const NewSummoner = (props) => {
       {/* need to add conditional rendering here, cannot assume the player has played ranked queues */}
       {/* use filter or map to separate them */}
 
+      {/* need to clear state after checking a new user so it doesnt display old stats */}
       {success && rankedTFTInfo && (
         <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
       )}
       {success && hyperRollInfo && (
         <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
+      )}
+
+      {!summonerFound && (
+        <h1>Summoner not found! Did you select the correct region?</h1>
+      )}
+
+      {success && !rankedTFTInfo && !hyperRollInfo && (
+        <h1>No Ranked Info Found!</h1>
       )}
     </>
   );
