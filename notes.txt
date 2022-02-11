@@ -1,0 +1,3 @@
+1. Search bar leads to a NEW dynamic page everytime
+2. home page swap between tft/league, might use Redux to store this so the button can work both ways
+2a. something like fn () = { mode.search} where mode=tft/league

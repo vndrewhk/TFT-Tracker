@@ -12,6 +12,8 @@ import HyperRollStats from "./HyperRollStats";
 import RankedStats from "./RankedStats";
 
 const NewSummoner = (props) => {
+  // overwhelming amount of state, a reducer would be better now.
+  const [hasLoaded, setHasLoaded] = useState("false");
   const [summonerName, setSummonerName] = useState("");
   const [summonerInfo, setSummonerInfo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +36,8 @@ const NewSummoner = (props) => {
   };
 
   //this grabs the summoner ID which can be used to process info
+  // want to reformat to use a hook that calls this function so its not defined here
+  //reusable and can pass information through
   const fetchSummoner = async () => {
     setIsLoading(true);
     setRankedTFTInfo(null);
@@ -84,6 +88,19 @@ const NewSummoner = (props) => {
   useEffect(() => {
     summonerBlurHandler();
   }, []);
+
+  useEffect(() => {
+    setHasLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    setRegion(props.region);
+    setSummonerName(props.summonerName);
+  }, [props.region, props.summonerName]);
+
+  useEffect(() => {
+    fetchMatches();
+  }, [hasLoaded, region]);
 
   const assignRankedInfo = useCallback(() => {
     let rankedFiltered = matchInfo.matchInfo.filter(function (obj) {
