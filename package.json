@@ -13,9 +13,12 @@
     "@fontsource/roboto": "^4.5.3",
     "@mui/icons-material": "^5.4.1",
     "@mui/material": "^5.4.1",
+    "@reduxjs/toolkit": "^1.7.2",
     "next": "12.0.10",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2"
   },
   "devDependencies": {
     "eslint": "8.8.0",

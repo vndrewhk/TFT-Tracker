@@ -10,12 +10,18 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+import { summonerActions } from "../../../apps/store/summonerInfoSlice";
 
 // when searched, <Link> to the page that you searched for, that page will automatically render and fetch the info for the summoner/display it
 // dont need to pass info bc everything will be in the query page
 
 //the component that renders the info will grab all necessary info FROM the URL entered
 //no need for global state
+
+// redux region or summoner name so that it updates and forces refresh of comp
+// header function will change redux, and that redux will be passed onto the fetcher
+//therefore it MUST UPDATE :DDDD
 
 const HeaderRoutes = (props) => {
   const [region, setRegion] = useState("NA1");
@@ -33,8 +39,30 @@ const HeaderRoutes = (props) => {
   };
 
   // store results in redux store maybe?
+
+  const dispatch = useDispatch();
+  const summonerInfoState = useSelector((state) => state.summonerInfo);
+
+  const updateSummonerRedux = () => {
+    dispatch(
+      summonerActions.routerSummoner({
+        routerSummoner: summonerName,
+        routerRegion: region,
+      })
+    );
+  };
+
+  const updateLoading = () => {
+    dispatch(summonerActions.fetchLoading());
+  };
+
+  // when changing the summonerName through change, change the redux value as well
+  //read the redux in newsummoner so it has to reload
   const redirectHandler = () => {
+    updateLoading();
+    updateSummonerRedux();
     router.push(`/tft/${region}/${summonerName}`);
+    updateLoading();
   };
 
   return (
