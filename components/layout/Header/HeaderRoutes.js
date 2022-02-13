@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useRef, useState } from "react";
+import { useRouter } from "next/router";
 
 // when searched, <Link> to the page that you searched for, that page will automatically render and fetch the info for the summoner/display it
 // dont need to pass info bc everything will be in the query page
@@ -18,15 +19,22 @@ import { useRef, useState } from "react";
 
 const HeaderRoutes = (props) => {
   const [region, setRegion] = useState("NA1");
-
   const [summonerName, setSummonerName] = useState("");
-  const summonerRef = useRef();
-  const summonerBlurHandler = () => {
-    setSummonerName(summonerRef.current.value);
-  };
 
+  const summonerRef = useRef();
+
+  const router = useRouter();
+
+  const summonerChangeHandler = (e) => {
+    setSummonerName(e.target.value);
+  };
   const regionChangeHandler = (e) => {
     setRegion(e.target.value);
+  };
+
+  // store results in redux store maybe?
+  const redirectHandler = () => {
+    router.push(`/tft/${region}/${summonerName}`);
   };
 
   return (
@@ -39,8 +47,7 @@ const HeaderRoutes = (props) => {
             label="Summoner Name"
             variant="standard"
             inputRef={summonerRef}
-            onChange={summonerBlurHandler}
-            onBlur={summonerBlurHandler}
+            onChange={summonerChangeHandler}
           />
           <FormControl>
             <InputLabel id="region"> Region </InputLabel>
@@ -79,7 +86,7 @@ const HeaderRoutes = (props) => {
           backgroundColor: "#1ad1b9",
           marginRight: "5px",
         }}
-        onClick={props.SearchTFT}
+        onClick={redirectHandler}
         variant="contained"
       >
         Search

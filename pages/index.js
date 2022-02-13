@@ -3,8 +3,7 @@ import NewSummoner from "../components/matches/NewSummoner";
 const HomePage = () => {
   return (
     <div>
-      Home Page
-      <NewSummoner></NewSummoner>
+    <h1>Please use the search bar above to search for users!</h1>
     </div>
   );
 };

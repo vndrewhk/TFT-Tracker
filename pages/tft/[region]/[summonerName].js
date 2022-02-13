@@ -5,12 +5,11 @@ const SummonerInfoPage = () => {
   const router = useRouter();
 
   const { region, summonerName } = router.query;
-  
+
   return (
-    <NewSummoner
-      region={region}
-      summonerName={summonerName}
-    ></NewSummoner>
+    <>
+      <NewSummoner region={region} summonerName={summonerName}></NewSummoner>
+    </>
   );
 };
 
