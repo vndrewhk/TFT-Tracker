@@ -18,11 +18,11 @@ const TFTMatchDetails = async (req, res) => {
       throw new Error("Something went wrong!");
     }
     if (responseData.ok) {
-      const matchHistory = await responseData.json();
+      const matchIds = await responseData.json();
 
       //res status is the one that returns the info
 
-      res.status(200).json({ matchHistory });
+      res.status(200).json({ matchIds });
       // res.status(200).json({requestType})
       //return matchInfo doesnt do anything
     }

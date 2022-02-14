@@ -30,8 +30,7 @@ const SummonerFetch = async (req, res) => {
     });
 
     if (!responseData.ok) {
-      res.status(200).json({ message: "!ok" });
-      throw new Error("Something went wrong!");
+      res.status(200).json({ data });
     }
     if (responseData.ok) {
       const data = await responseData.json();
@@ -39,9 +38,7 @@ const SummonerFetch = async (req, res) => {
       res.status(200).json({ data });
     }
   } catch (err) {
-    res.status(200).json({ message: "err" });
-    console.log(err);
-    return err;
+    res.status(500).json({ data });
   }
   res.end();
 };

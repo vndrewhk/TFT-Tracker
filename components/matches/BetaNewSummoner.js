@@ -7,6 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
@@ -14,6 +15,8 @@ import HyperRollStats from "./HyperRollStats";
 import RankedStats from "./RankedStats";
 
 const BetaNewSummoner = (props) => {
+  // error occurs upon manually entering the page bc it doesnt get passed the query
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const summonerInfoState = useSelector((state) => state.summonerInfo);
@@ -78,11 +81,10 @@ const BetaNewSummoner = (props) => {
       );
       const data = await response.json();
 
-      console.log(data.data);
+      console.log(data);
+
       setSummonerFound(true);
-      if (data.data === undefined) {
-        setSummonerFound(false);
-      }
+ 
       console.log("fetched");
       setIsLoading(false);
 
@@ -119,12 +121,16 @@ const BetaNewSummoner = (props) => {
     const data = await fetchSummoner();
     setSummonerInfo(data);
     try {
-      const matches = await fetch(
-        `/api/tft_matches?region=${region}&summonerId=${data.id}`
-      );
-      const matchData = await matches.json();
-      setMatchInfo(matchData);
-      setSuccess(true);
+      if (data.id) {
+        const matches = await fetch(
+          `/api/tft_matches?region=${region}&summonerId=${data.id}`
+        );
+        const matchData = await matches.json();
+        setMatchInfo(matchData);
+        setSuccess(true);
+      } else {
+          setSummonerFound(false)
+      }
     } catch (err) {
       setSuccess(false);
       console.log(err);
@@ -152,8 +158,9 @@ const BetaNewSummoner = (props) => {
   };
 
   const logId = () => {
-    // console.log(summonerName);
-    // console.log(region);
+    console.log(summonerName);
+    console.log(region);
+    console.log(router.query);
     // console.log(summonerInfo);
     // console.log(matchInfo.matchInfo);
     // console.log(rankedTFTInfo);
@@ -161,7 +168,7 @@ const BetaNewSummoner = (props) => {
     // console.log(success);
 
     console.log(summonerInfoState.summonerInfo);
-    console.log(matchIds);
+    console.log(summonerInfoState.matchIds);
     console.log(summonerInfoState.routerSummoner);
   };
 
@@ -171,7 +178,12 @@ const BetaNewSummoner = (props) => {
   }, []);
 
   //this ensures page reloads component with URL info
+
   useEffect(() => {
+    //     setRegion(router.query.region);
+    //     setSummonerName(router.query.summonerName);
+    //   }, [router.query.region, router.query.summonerName]);
+
     setRegion(summonerInfoState.routerRegion);
     setSummonerName(summonerInfoState.routerSummoner);
   }, [summonerInfoState.routerRegion, summonerInfoState.routerSummoner]);
@@ -198,7 +210,7 @@ const BetaNewSummoner = (props) => {
   useEffect(() => {
     if (success) {
       summonerStateHandler();
-      //   storeMatchIds();
+      //   fetchMatchDetails();
     }
   }, [success]);
 
@@ -261,6 +273,9 @@ const BetaNewSummoner = (props) => {
       </Button> */}
       <Button variant="contained" onClick={fetchMatchDetails}>
         Fetch Match Details
+      </Button>
+      <Button variant="contained" onClick={storeMatchIds}>
+        store match ids
       </Button>
       {isLoading && <h1>Loading...</h1>}
 
