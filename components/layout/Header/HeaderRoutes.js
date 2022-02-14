@@ -19,7 +19,7 @@ import { summonerActions } from "../../../apps/store/summonerInfoSlice";
 //the component that renders the info will grab all necessary info FROM the URL entered
 //no need for global state
 
-// redux region or summoner name so that it updates and forces refresh of comp
+// redux region or summoner name so that it uupdates and forces refresh of comp
 // header function will change redux, and that redux will be passed onto the fetcher
 //therefore it MUST UPDATE :DDDD
 
@@ -52,22 +52,21 @@ const HeaderRoutes = (props) => {
     );
   };
 
-  const updateLoading = () => {
-    dispatch(summonerActions.fetchLoading());
-  };
+
 
   // when changing the summonerName through change, change the redux value as well
   //read the redux in newsummoner so it has to reload
-  const redirectHandler = () => {
-    updateLoading();
+  const redirectHandler = (e) => {
+    e.preventDefault();
+
     updateSummonerRedux();
     router.push(`/tft/${region}/${summonerName}`);
-    updateLoading();
+  
   };
 
   return (
     <div className={styles.searchBox}>
-      <form onSubmit={props.SearchTFT}>
+      <form onSubmit={redirectHandler}>
         <Box>
           <TextField
             id="input-with-sx"
@@ -77,31 +76,31 @@ const HeaderRoutes = (props) => {
             inputRef={summonerRef}
             onChange={summonerChangeHandler}
           />
-          <FormControl>
-            <InputLabel id="region"> Region </InputLabel>
-            <Select
-              labelId="region-select-label"
-              id="region-simple-select"
-              value={region}
-              label="Region"
-              onChange={regionChangeHandler}
-              sx={{ backgroundColor: "white" }}
-            >
-              <MenuItem value={"NA1"}>NA1</MenuItem>
-              <MenuItem value={"EUW1"}>EUW1</MenuItem>
-              <MenuItem value={"EUN1"}>EUN1</MenuItem>
-              <MenuItem value={"KR"}>KR</MenuItem>
-              <MenuItem value={"LA1"}>LA1</MenuItem>
-              <MenuItem value={"LA2"}>LA2</MenuItem>
-              <MenuItem value={"BR1"}>BR1</MenuItem>
-              <MenuItem value={"OC1"}>OC1</MenuItem>
-              <MenuItem value={"RU"}>RU</MenuItem>
-              <MenuItem value={"TR1"}>TR1</MenuItem>
-              <MenuItem value={"JP1"}>JP1</MenuItem>
-            </Select>
-          </FormControl>
         </Box>
       </form>
+      <FormControl>
+        <InputLabel id="region"> Region </InputLabel>
+        <Select
+          labelId="region-select-label"
+          id="region-simple-select"
+          value={region}
+          label="Region"
+          onChange={regionChangeHandler}
+          sx={{ backgroundColor: "white" }}
+        >
+          <MenuItem value={"NA1"}>NA1</MenuItem>
+          <MenuItem value={"EUW1"}>EUW1</MenuItem>
+          <MenuItem value={"EUN1"}>EUN1</MenuItem>
+          <MenuItem value={"KR"}>KR</MenuItem>
+          <MenuItem value={"LA1"}>LA1</MenuItem>
+          <MenuItem value={"LA2"}>LA2</MenuItem>
+          <MenuItem value={"BR1"}>BR1</MenuItem>
+          <MenuItem value={"OC1"}>OC1</MenuItem>
+          <MenuItem value={"RU"}>RU</MenuItem>
+          <MenuItem value={"TR1"}>TR1</MenuItem>
+          <MenuItem value={"JP1"}>JP1</MenuItem>
+        </Select>
+      </FormControl>
       <Button
         sx={{
           "&:hover": {

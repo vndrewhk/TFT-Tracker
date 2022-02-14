@@ -17,8 +17,6 @@ const BetaNewSummoner = (props) => {
   const dispatch = useDispatch();
 
   const summonerInfoState = useSelector((state) => state.summonerInfo);
-
-  // overwhelming amount of state, a reducer would be better now.
   const [hasLoaded, setHasLoaded] = useState("false");
   const [summonerName, setSummonerName] = useState("");
   const [summonerInfo, setSummonerInfo] = useState("");
@@ -28,8 +26,18 @@ const BetaNewSummoner = (props) => {
   const [region, setRegion] = useState("NA1");
   const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
+  const [summonerFound, setSummonerFound] = useState(true);
+  const [matchIds, setMatchIds] = useState({});
 
-  const [summonerFound, setSummonerFound] = useState(false);
+  const [rankedTftVisible, setRankedTftVisible] = useState(true);
+  const [hyperRollVisible, setHyperRollVisible] = useState(true);
+
+  const toggleRanked = () => {
+    setRankedTftVisible(!rankedTftVisible);
+  };
+  const toggleHyperRoll = () => {
+    setHyperRollVisible(!hyperRollVisible);
+  };
 
   const summonerRef = useRef();
 
@@ -44,6 +52,14 @@ const BetaNewSummoner = (props) => {
     dispatch(
       summonerActions.replaceSummoner({
         summonerInfo,
+      })
+    );
+  };
+
+  const storeMatchIds = () => {
+    dispatch(
+      summonerActions.replaceMatchIds({
+        matchIds,
       })
     );
   };
@@ -64,7 +80,7 @@ const BetaNewSummoner = (props) => {
 
       console.log(data.data);
       setSummonerFound(true);
-      if (!data.data) {
+      if (data.data === undefined) {
         setSummonerFound(false);
       }
       console.log("fetched");
@@ -72,10 +88,27 @@ const BetaNewSummoner = (props) => {
 
       return data.data;
     } catch (err) {
+      setSummonerFound(false);
       setIsLoading(false);
       console.log(err);
     }
     setIsLoading(false);
+  };
+
+  // here we assume that fetching the user has been successful.
+  const fetchMatchDetails = async () => {
+    if (success) {
+      try {
+        const response = await fetch(
+          `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
+        );
+        const data = await response.json();
+
+        setMatchIds(data.matchIds);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   //if url is /summonerName/matches then call this fn
@@ -97,23 +130,6 @@ const BetaNewSummoner = (props) => {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    summonerBlurHandler();
-  }, []);
-
-  useEffect(() => {
-    setHasLoaded(true);
-  }, []);
-
-  useEffect(() => {
-    setRegion(summonerInfoState.routerRegion);
-    setSummonerName(summonerInfoState.routerSummoner);
-  }, [summonerInfoState.routerRegion, summonerInfoState.routerSummoner]);
-
-  useEffect(() => {
-    fetchMatches();
-  }, [hasLoaded, region]);
 
   const assignRankedInfo = useCallback(() => {
     let rankedFiltered = matchInfo.matchInfo.filter(function (obj) {
@@ -145,16 +161,46 @@ const BetaNewSummoner = (props) => {
     // console.log(success);
 
     console.log(summonerInfoState.summonerInfo);
+    console.log(matchIds);
     console.log(summonerInfoState.routerSummoner);
   };
 
+  //   this makes it so that it will fetch the info on first load of page
+  useEffect(() => {
+    setHasLoaded(true);
+  }, []);
+
+  //this ensures page reloads component with URL info
+  useEffect(() => {
+    setRegion(summonerInfoState.routerRegion);
+    setSummonerName(summonerInfoState.routerSummoner);
+  }, [summonerInfoState.routerRegion, summonerInfoState.routerSummoner]);
+
+  //   this prevents it from trying to grab data when undefined, leading to the "NO SUMMONER FOUND" text.
+  useEffect(() => {
+    const loadNewUser = setTimeout(() => {
+      fetchMatches();
+    }, 1);
+    return () => clearTimeout(loadNewUser);
+  }, [hasLoaded, region]);
+
+  //   temporary, this will ensure correct hyperroll info passed
   useEffect(() => {
     assignHyperRollInfo();
   }, [assignHyperRollInfo, matchInfo]);
 
+  //   temporary, this will ensure correct ranked info passed
   useEffect(() => {
     assignRankedInfo();
   }, [assignRankedInfo, matchInfo]);
+
+  //   this ensures redux state is updated with new info
+  useEffect(() => {
+    if (success) {
+      summonerStateHandler();
+      //   storeMatchIds();
+    }
+  }, [success]);
 
   return (
     <>
@@ -192,20 +238,29 @@ const BetaNewSummoner = (props) => {
           </FormControl>
         </Box>
       </form>
-      <Button variant="contained" onClick={fetchSummoner}>
+      {/* <Button variant="contained" onClick={fetchSummoner}>
         Click to fetch
-      </Button>
+      </Button> */}
       <Button variant="contained" onClick={fetchMatches}>
-        Click to fetch AGAIN
+        Click to fetch
       </Button>
       <Button variant="contained" onClick={logId}>
         Click to log current info
       </Button>
-      <Button variant="contained" onClick={summonerBlurHandler}>
+      {/* <Button variant="contained" onClick={summonerBlurHandler}>
         Click to record summoner name
       </Button>
       <Button variant="contained" onClick={assignInfo}>
         Click to assign INFO
+      </Button> */}
+      {/* <Button variant="contained" onClick={toggleRanked}>
+        Toggle RANKED
+      </Button>
+      <Button variant="contained" onClick={toggleHyperRoll}>
+        Toggle HYPERROLL
+      </Button> */}
+      <Button variant="contained" onClick={fetchMatchDetails}>
+        Fetch Match Details
       </Button>
       {isLoading && <h1>Loading...</h1>}
 
@@ -213,14 +268,16 @@ const BetaNewSummoner = (props) => {
       {/* use filter or map to separate them */}
 
       {/* need to clear state after checking a new user so it doesnt display old stats */}
-      {success && rankedTFTInfo && (
+      {success && rankedTFTInfo && rankedTftVisible && (
         <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
       )}
-      {success && hyperRollInfo && (
+      {/* {success&&rankedTFTInfo&&rankedTftVisible&&<div>{matchIds}</div>} */}
+      {/* would map a component here */}
+      {success && hyperRollInfo && hyperRollVisible && (
         <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
       )}
 
-      {!summonerFound && (
+      {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
         <h1>Summoner not found! Did you select the correct region?</h1>
       )}
 

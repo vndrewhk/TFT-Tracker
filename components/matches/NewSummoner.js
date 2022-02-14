@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import HyperRollStats from "./HyperRollStats";
 import RankedStats from "./RankedStats";
 
@@ -22,8 +23,9 @@ const NewSummoner = (props) => {
   const [region, setRegion] = useState("NA1");
   const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
-
   const [summonerFound, setSummonerFound] = useState(false);
+
+  const summonerInfoState = useSelector((state) => state.summonerInfo);
 
   const summonerRef = useRef();
 
