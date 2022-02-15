@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import HyperRollStats from "./HyperRollStats";
+import IndividualMatch from "./IndividualMatch";
 import RankedStats from "./RankedStats";
 
 const BetaNewSummoner = (props) => {
@@ -84,7 +85,7 @@ const BetaNewSummoner = (props) => {
       console.log(data);
 
       setSummonerFound(true);
- 
+
       console.log("fetched");
       setIsLoading(false);
 
@@ -129,7 +130,7 @@ const BetaNewSummoner = (props) => {
         setMatchInfo(matchData);
         setSuccess(true);
       } else {
-          setSummonerFound(false)
+        setSummonerFound(false);
       }
     } catch (err) {
       setSuccess(false);
@@ -180,8 +181,6 @@ const BetaNewSummoner = (props) => {
   //this ensures page reloads component with URL info
 
   useEffect(() => {
- 
-
     setRegion(summonerInfoState.routerRegion);
     setSummonerName(summonerInfoState.routerSummoner);
   }, [summonerInfoState.routerRegion, summonerInfoState.routerSummoner]);
@@ -297,6 +296,7 @@ const BetaNewSummoner = (props) => {
       {success && !rankedTFTInfo && !hyperRollInfo && (
         <h1>No Ranked Info Found!</h1>
       )}
+      <IndividualMatch></IndividualMatch>
     </>
   );
 };
