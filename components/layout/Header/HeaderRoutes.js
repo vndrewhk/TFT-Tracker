@@ -50,6 +50,7 @@ const HeaderRoutes = (props) => {
     );
   };
 
+  // because the header is ALWAYS on the page, this is a valid solution
   const setSummonerRedux = useCallback(() => {
     dispatch(
       summonerActions.routerSummoner({

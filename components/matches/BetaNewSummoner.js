@@ -180,9 +180,7 @@ const BetaNewSummoner = (props) => {
   //this ensures page reloads component with URL info
 
   useEffect(() => {
-    //     setRegion(router.query.region);
-    //     setSummonerName(router.query.summonerName);
-    //   }, [router.query.region, router.query.summonerName]);
+ 
 
     setRegion(summonerInfoState.routerRegion);
     setSummonerName(summonerInfoState.routerSummoner);
