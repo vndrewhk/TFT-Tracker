@@ -1,8 +1,8 @@
 const TFTIndividualMatch = async (req, res) => {
-  let apiKey = "RGAPI-d6ca72e1-d477-4a15-9437-12cffba1e6d1";
+  let apiKey = "RGAPI-52c3e62b-9e41-42ef-98c3-d99f66de114d";
   let URL = "https://americas.api.riotgames.com/tft/match/v1/matches/";
   //   b2_-gkNZhsVXT_1nTbcTWaGD0HcDvUhXffYuQYcLZxu0AwE4VAR3teWyakfuxUIeWUoQ8ugLtnZvzw/ids?count=20
-
+  
   let matchId = req.query.matchId;
   let requestURL = `${URL}${matchId}`;
   try {

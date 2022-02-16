@@ -16,7 +16,6 @@ import IndividualMatch from "./IndividualMatch";
 import RankedStats from "./RankedStats";
 
 const BetaNewSummoner = (props) => {
-  // error occurs upon manually entering the page bc it doesnt get passed the query
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -296,7 +295,6 @@ const BetaNewSummoner = (props) => {
       {success && !rankedTFTInfo && !hyperRollInfo && (
         <h1>No Ranked Info Found!</h1>
       )}
-      <IndividualMatch></IndividualMatch>
     </>
   );
 };

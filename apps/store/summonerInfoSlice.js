@@ -4,10 +4,12 @@ const initialSummonerState = {
   summonerInfo: {},
   matchIds: [{}],
   matchData: [{}],
+  matchPuuids: [],
   gameMode: "TFT",
   routerSummoner: "",
   routerRegion: "",
   isLoading: false,
+  success: false,
 };
 
 const summonerInfoSlice = createSlice({
@@ -29,6 +31,12 @@ const summonerInfoSlice = createSlice({
     },
     updateMatchData(state, action) {
       state.matchData = action.payload.matchData;
+    },
+    updatePuuids(state, action) {
+      state.puuids = action.payload.puuids;
+    },
+    toggleSuccess(state, action) {
+      state.success = action.payload.success;
     },
   },
 });

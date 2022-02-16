@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import BetaNewSummoner from "../../../components/matches/BetaNewSummoner";
+import IndividualMatch from "../../../components/matches/IndividualMatch";
 import NewSummoner from "../../../components/matches/NewSummoner";
+import RenderMatchData from "../../../components/matches/RenderMatchData";
 
 const SummonerInfoPage = () => {
   const router = useRouter();
@@ -16,6 +18,8 @@ const SummonerInfoPage = () => {
         region={region}
         summonerName={summonerName}
       ></BetaNewSummoner>
+      <IndividualMatch></IndividualMatch>
+      {/* {summonerInfoState.success && <RenderMatchData></RenderMatchData>} */}
     </>
   );
 };

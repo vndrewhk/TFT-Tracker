@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import RenderSummonerNames from "./RenderSummonerNames";
 
 const RenderMatchData = () => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const matchData = summonerInfoState.matchData;
 
+  const [puuids, setPuuids] = useState([]);
+
+  //   parses data and converts to readable format
   const convertData = (matchData) => {
     //   converts time into minute and seconds
     const gameMinutes = Math.floor(matchData.info.game_length / 60);
@@ -37,11 +42,35 @@ const RenderMatchData = () => {
     };
     const gameQueue = queueConverter(matchData.info);
 
+    const puuidGrabber = (matchData) => {
+      // its because THIS IS BEING IPDATED LIKER 2913084281903 TIMES MAN FK
+      let puuidLists = matchData.info.participants.map(
+        (summoner) => summoner.puuid
+      );
+
+      //   console.log(puuidList);
+      return puuidLists;
+    };
+
+    // because puuids are so closely linked to the matchdata, should i even put it in redux? the data is already there, intrinsicly
+
+    const puuidList = puuidGrabber(matchData);
+    // setPuuids(puuidList);
+
     // console.log(Object.values(gameDate))
-    return { gameTime, gameDate, gameQueue };
+    return { gameTime, gameDate, gameQueue, puuidList };
   };
 
-  const { gameTime, gameDate, gameQueue } = convertData(matchData);
+  const { gameTime, gameDate, gameQueue, puuidList } = convertData(matchData);
+  //   console.log(puuidList);
+  console.log("rendering");
+  const puuidListUpdate = () => {
+    setPuuids(puuidList);
+  };
+
+  const seePuuid = () => {
+    console.log(puuids);
+  };
   //   need to setup API call to grab each player and return summoner name
   return (
     <>
@@ -49,6 +78,9 @@ const RenderMatchData = () => {
       <h2>Date: {gameDate.toString()}</h2>
       <h2>Game Length: {gameTime}</h2>
       <h3>Game Type: {gameQueue}</h3>
+      {/* <RenderSummonerNames></RenderSummonerNames> */}
+      <button onClick={seePuuid}>see puuids</button>
+      <button onClick={puuidListUpdate}> puuid update</button>
       {/* <h2>Game Remainder: {gameRemainder}</h2> */}
     </>
   );

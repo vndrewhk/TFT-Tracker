@@ -1,11 +1,10 @@
-const TFTMatchDetails = async (req, res) => {
+const getByPUUID = async (req, res) => {
   let apiKey = "RGAPI-52c3e62b-9e41-42ef-98c3-d99f66de114d";
-  let URL = "https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/";
-  //   b2_-gkNZhsVXT_1nTbcTWaGD0HcDvUhXffYuQYcLZxu0AwE4VAR3teWyakfuxUIeWUoQ8ugLtnZvzw/ids?count=20
+  let URL =
+    "https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/";
 
-  let count = "/ids?count=20";
   let puuid = req.query.puuid;
-  let requestURL = `${URL}${puuid}${count}`;
+  let requestURL = `${URL}${puuid}`;
   try {
     const responseData = await fetch(requestURL, {
       headers: {
@@ -18,11 +17,11 @@ const TFTMatchDetails = async (req, res) => {
       throw new Error("Something went wrong!");
     }
     if (responseData.ok) {
-      const matchIds = await responseData.json();
+      const userInfo = await responseData.json();
 
       //res status is the one that returns the info
 
-      res.status(200).json({ matchIds });
+      res.status(200).json({ userInfo });
       // res.status(200).json({requestType})
       //return matchInfo doesnt do anything
     }
@@ -34,4 +33,4 @@ const TFTMatchDetails = async (req, res) => {
   res.end();
 };
 
-export default TFTMatchDetails;
+export default getByPUUID;
