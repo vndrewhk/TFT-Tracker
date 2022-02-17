@@ -1,5 +1,5 @@
 const TFTIndividualMatch = async (req, res) => {
-  let apiKey = "RGAPI-52c3e62b-9e41-42ef-98c3-d99f66de114d";
+  let apiKey = "RGAPI-52f86bcb-fce4-4445-bcb5-309ce121acaf";
   let URL = "https://americas.api.riotgames.com/tft/match/v1/matches/";
   //   b2_-gkNZhsVXT_1nTbcTWaGD0HcDvUhXffYuQYcLZxu0AwE4VAR3teWyakfuxUIeWUoQ8ugLtnZvzw/ids?count=20
   

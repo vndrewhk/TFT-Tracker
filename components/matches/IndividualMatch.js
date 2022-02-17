@@ -67,7 +67,7 @@ const IndividualMatch = () => {
     <>
       {matchIsLoading && <div>Loading Match Details</div>}
       <button onClick={fetchMatchInfo}>fetch match details</button>
-      {/* <button onClick={logInfo}>log match details</button> */}
+      <button onClick={logInfo}>log match details</button>
       {/* <button onClick={setSuccessButton}> set suc</button> */}
       {success && <RenderMatchData></RenderMatchData>}
     </>

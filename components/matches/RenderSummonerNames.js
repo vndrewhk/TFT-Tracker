@@ -1,30 +1,62 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const RenderSummonerNames = () => {
+  // probably shouldnt use redux, because state for each match should be individual
+  //   will need to rework to not use redux
   const summonerInfoState = useSelector((state) => state.summonerInfo);
+  const [userList, setUserList] = useState([]);
+  const puuidList = summonerInfoState.matchPuuids;
+
+  const grabAllSummoners = () => {
+    setUserList([]);
+    puuidList.map((puuid) => getSummonerByPUUID(puuid));
+  };
   const getSummonerByPUUID = async (puuid) => {
-    setMatchIsLoading(true);
     try {
       const response = await fetch(`/api/getByPUUID?puuid=${puuid}`);
-      const matchDetails = await response.json();
-      setMatchData(matchDetails.matchData);
+      const userDetails = await response.json();
 
-      if (!success) {
-        setSuccess(true);
-      }
-      setMatchIsLoading(false);
+      setUserList((prevState) => [...prevState, userDetails.userInfo]);
     } catch (err) {
-      setSuccess(false);
       console.log(err);
     }
     // setSuccess(true);
   };
 
-//   useEffect(() => {
-//     getSummonerByPUUID;
-//   }, []);
+  //   useEffect(() => {
+  //     getSummonerByPUUID;
+  //   }, []);
 
-  return <>Summoner Names</>;
+  const summonerList = () => {
+    userList.map((user) => (
+      <>
+        <h2>
+          {user.gameName}
+          {user.tagLine}
+        </h2>
+      </>
+    ));
+  };
+
+  const listSummoners = () => {
+    console.log(userList);
+  };
+
+  return (
+    <>
+      <ul>
+        {userList.map((user) => (
+          <>
+            <h2 key={user.puuid}>
+              {user.gameName}#{user.tagLine}
+            </h2>
+          </>
+        ))}
+      </ul>
+      <button onClick={grabAllSummoners}>Grab all summoners</button>
+      <button onClick={listSummoners}>List all summoners</button>
+    </>
+  );
 };
 export default RenderSummonerNames;

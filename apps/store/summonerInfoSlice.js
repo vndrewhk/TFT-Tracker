@@ -4,7 +4,8 @@ const initialSummonerState = {
   summonerInfo: {},
   matchIds: [{}],
   matchData: [{}],
-  matchPuuids: [{}],
+  matchPuuids: [],
+  requestPuuid: "",
   gameMode: "TFT",
   routerSummoner: "",
   routerRegion: "",
@@ -37,6 +38,9 @@ const summonerInfoSlice = createSlice({
     },
     toggleSuccess(state, action) {
       state.success = action.payload.success;
+    },
+    replaceRequestPuuid(state, action) {
+      state.requestPuuid = action.payload.requestPuuid;
     },
   },
 });

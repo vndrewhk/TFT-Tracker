@@ -61,11 +61,21 @@ const RenderMatchData = () => {
     const puuidList = puuidGrabber(matchData);
     // setPuuids(puuidList);
 
+    // use puuid in summonerInfoState.summonerInfo.puuid
+
+    const participantInfo =
+      summonerInfoState.matchData.info.participants.filter(
+        (participant) =>
+          participant.puuid == summonerInfoState.summonerInfo.puuid
+      );
+
+    // {summonerInfoState.matchData.info.participants.placement}
     // console.log(Object.values(gameDate))
-    return { gameTime, gameDate, gameQueue, puuidList };
+    return { gameTime, gameDate, gameQueue, puuidList, participantInfo };
   };
 
-  const { gameTime, gameDate, gameQueue, puuidList } = convertData(matchData);
+  const { gameTime, gameDate, gameQueue, puuidList, participantInfo } =
+    convertData(matchData);
   //   console.log(puuidList);
   console.log("rendering");
   const puuidListUpdate = () => {
@@ -90,12 +100,13 @@ const RenderMatchData = () => {
     console.log(puuids);
     console.log(summonerInfoState.matchPuuids);
   };
-  //   need to setup API call to grab each player and return summoner name
+ 
   return (
     <>
-      <h1>Match Data for Match {matchData.metadata.match_id}</h1>
+      <h1>Match {matchData.metadata.match_id}</h1>
       <h2>Date: {gameDate.toString()}</h2>
       <h2>Game Length: {gameTime}</h2>
+      <h3>Placed: {participantInfo[0].placement}</h3>
       <h3>Game Type: {gameQueue}</h3>
       {puuids && <RenderSummonerNames></RenderSummonerNames>}
       <button onClick={seePuuid}>see puuids</button>

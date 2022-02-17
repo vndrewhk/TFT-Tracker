@@ -97,7 +97,7 @@ const BetaNewSummoner = (props) => {
     setIsLoading(false);
   };
 
-  // here we assume that fetching the user has been successful.
+
   const fetchMatchDetails = async () => {
     if (success) {
       try {
@@ -105,7 +105,7 @@ const BetaNewSummoner = (props) => {
           `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
         );
         const data = await response.json();
-
+          
         setMatchIds(data.matchIds);
       } catch (err) {
         console.log(err);
