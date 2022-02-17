@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const RenderSummonerNames = () => {
@@ -19,6 +20,11 @@ const RenderSummonerNames = () => {
     }
     // setSuccess(true);
   };
-  return <></>;
+
+//   useEffect(() => {
+//     getSummonerByPUUID;
+//   }, []);
+
+  return <>Summoner Names</>;
 };
 export default RenderSummonerNames;

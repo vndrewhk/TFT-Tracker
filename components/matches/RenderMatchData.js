@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderSummonerNames from "./RenderSummonerNames";
 
 const RenderMatchData = () => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const matchData = summonerInfoState.matchData;
 
-  const [puuids, setPuuids] = useState([]);
+  const [puuids, setPuuids] = useState();
+  const dispatch = useDispatch();
 
   //   parses data and converts to readable format
   const convertData = (matchData) => {
@@ -48,6 +50,8 @@ const RenderMatchData = () => {
         (summoner) => summoner.puuid
       );
 
+      //   can map to the render instead of the state
+
       //   console.log(puuidList);
       return puuidLists;
     };
@@ -68,8 +72,23 @@ const RenderMatchData = () => {
     setPuuids(puuidList);
   };
 
+  const storePuuids = useCallback(() => {
+    //6
+    console.log("dispatch");
+    dispatch(
+      summonerActions.updatePuuids({
+        matchPuuids: puuids,
+      })
+    );
+  }, [dispatch, puuids]);
+
+  useEffect(() => {
+    storePuuids();
+  }, [puuids, storePuuids]);
+
   const seePuuid = () => {
     console.log(puuids);
+    console.log(summonerInfoState.matchPuuids);
   };
   //   need to setup API call to grab each player and return summoner name
   return (
@@ -78,9 +97,10 @@ const RenderMatchData = () => {
       <h2>Date: {gameDate.toString()}</h2>
       <h2>Game Length: {gameTime}</h2>
       <h3>Game Type: {gameQueue}</h3>
-      {/* <RenderSummonerNames></RenderSummonerNames> */}
+      {puuids && <RenderSummonerNames></RenderSummonerNames>}
       <button onClick={seePuuid}>see puuids</button>
       <button onClick={puuidListUpdate}> puuid update</button>
+      <button onClick={storePuuids}> Manually store puuid</button>
       {/* <h2>Game Remainder: {gameRemainder}</h2> */}
     </>
   );

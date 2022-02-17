@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import HyperRollStats from "./HyperRollStats";
-import IndividualMatch from "./IndividualMatch";
+
 import RankedStats from "./RankedStats";
 
 const BetaNewSummoner = (props) => {
