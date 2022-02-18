@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialSummonerState = {
   summonerInfo: {},
-  matchIds: [{}],
-  matchData: null,
+  matchIds: [],
+  matchData: [{}],
   matchPuuids: [],
   requestPuuid: "",
   gameMode: "TFT",

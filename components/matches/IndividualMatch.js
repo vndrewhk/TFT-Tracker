@@ -9,7 +9,8 @@ const IndividualMatch = (props) => {
   const [matchIsLoading, setMatchIsLoading] = useState(false); //2
   const [success, setSuccess] = useState(false); //3
   const [toggled, setToggled] = useState(false);
-  const matchId = "NA1_4216069806";
+  // const matchId = "NA1_4216069806";
+  const matchId = props.matchId;
   // const dispatch = useDispatch(); //4
   const summonerInfoState = useSelector((state) => state.summonerInfo); //5
   // map over the values of matchIds in the redux store
@@ -36,15 +37,6 @@ const IndividualMatch = (props) => {
     }
     // setSuccess(true);
   };
-
-  // const storeMatchInfo = useCallback(() => {
-  //   //6
-  //   dispatch(
-  //     summonerActions.updateMatchData({
-  //       matchData,
-  //     })
-  //   );
-  // }, [dispatch, matchData]);
 
   const logInfo = () => {
     console.log(summonerInfoState.matchData);

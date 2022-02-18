@@ -3,7 +3,7 @@ const TFTMatchDetails = async (req, res) => {
   let URL = "https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/";
   //   b2_-gkNZhsVXT_1nTbcTWaGD0HcDvUhXffYuQYcLZxu0AwE4VAR3teWyakfuxUIeWUoQ8ugLtnZvzw/ids?count=20
 
-  let count = "/ids?count=20";
+  let count = "/ids?count=5";
   let puuid = req.query.puuid;
   let requestURL = `${URL}${puuid}${count}`;
   try {

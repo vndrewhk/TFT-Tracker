@@ -30,7 +30,7 @@ const BetaNewSummoner = (props) => {
   const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
   const [summonerFound, setSummonerFound] = useState(true);
-  const [matchIds, setMatchIds] = useState({});
+  const [matchIds, setMatchIds] = useState([]);
 
   const [rankedTftVisible, setRankedTftVisible] = useState(true);
   const [hyperRollVisible, setHyperRollVisible] = useState(true);
@@ -97,20 +97,20 @@ const BetaNewSummoner = (props) => {
     setIsLoading(false);
   };
 
-
   const fetchMatchDetails = async () => {
-    if (success) {
-      try {
-        const response = await fetch(
-          `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
-        );
-        const data = await response.json();
-          
-        setMatchIds(data.matchIds);
-      } catch (err) {
-        console.log(err);
-      }
+    // success temporarily disabled bc of match v4 disabled
+    // if (success) {
+    try {
+      const response = await fetch(
+        `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
+      );
+      const data = await response.json();
+
+      setMatchIds(data.matchIds);
+    } catch (err) {
+      console.log(err);
     }
+    // }
   };
 
   //if url is /summonerName/matches then call this fn
@@ -210,6 +210,10 @@ const BetaNewSummoner = (props) => {
     }
   }, [success]);
 
+  useEffect(() => {
+    storeMatchIds();
+  }, [matchIds]);
+
   return (
     <>
       <form onSubmit={fetchSummoner}>
@@ -246,9 +250,7 @@ const BetaNewSummoner = (props) => {
           </FormControl>
         </Box>
       </form>
-      {/* <Button variant="contained" onClick={fetchSummoner}>
-        Click to fetch
-      </Button> */}
+
       <Button variant="contained" onClick={fetchMatches}>
         Click to fetch
       </Button>
@@ -275,15 +277,10 @@ const BetaNewSummoner = (props) => {
       </Button>
       {isLoading && <h1>Loading...</h1>}
 
-      {/* need to add conditional rendering here, cannot assume the player has played ranked queues */}
-      {/* use filter or map to separate them */}
-
-      {/* need to clear state after checking a new user so it doesnt display old stats */}
       {success && rankedTFTInfo && rankedTftVisible && (
         <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
       )}
-      {/* {success&&rankedTFTInfo&&rankedTftVisible&&<div>{matchIds}</div>} */}
-      {/* would map a component here */}
+
       {success && hyperRollInfo && hyperRollVisible && (
         <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
       )}

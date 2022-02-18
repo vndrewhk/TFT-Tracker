@@ -19,7 +19,14 @@ const SummonerInfoPage = () => {
         region={region}
         summonerName={summonerName}
       ></BetaNewSummoner>
-      <IndividualMatch></IndividualMatch>
+      {summonerInfoState.matchIds && (
+        <>
+          {summonerInfoState.matchIds.map((id) => (
+            <IndividualMatch key = {id} matchId = {id}></IndividualMatch>
+          ))}
+        </>
+      )}
+      {/* <IndividualMatch></IndividualMatch> */}
       {/* {summonerInfoState.success && <RenderMatchData></RenderMatchData>} */}
     </>
   );
