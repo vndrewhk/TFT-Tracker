@@ -1,57 +1,63 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
 
-const RenderSummonerNames = () => {
-  // probably shouldnt use redux, because state for each match should be individual
-  //   will need to rework to not use redux
-  const summonerInfoState = useSelector((state) => state.summonerInfo);
+const RenderSummonerNames = (props) => {
+  const [sortedUserList, setSortedUserList] = useState([]);
   const [userList, setUserList] = useState([]);
-  const puuidList = summonerInfoState.matchPuuids;
 
   const grabAllSummoners = () => {
     setUserList([]);
-    puuidList.map((puuid) => getSummonerByPUUID(puuid));
+    props.participants.map((player) => getSummonerByPUUID(player));
   };
-  const getSummonerByPUUID = async (puuid) => {
-    try {
-      const response = await fetch(`/api/getByPUUID?puuid=${puuid}`);
-      const userDetails = await response.json();
 
-      setUserList((prevState) => [...prevState, userDetails.userInfo]);
+  const getSummonerByPUUID = async (player) => {
+    try {
+      const response = await fetch(`/api/getByPUUID?puuid=${player.puuid}`);
+      const userDetails = await response.json();
+      setUserList((prevState) => [
+        ...prevState,
+        { ...player, ...userDetails.userInfo },
+      ]);
     } catch (err) {
       console.log(err);
     }
-    // setSuccess(true);
   };
 
-  //   useEffect(() => {
-  //     getSummonerByPUUID;
-  //   }, []);
-
-  const summonerList = () => {
-    userList.map((user) => (
-      <>
-        <h2>
-          {user.gameName}
-          {user.tagLine}
-        </h2>
-      </>
-    ));
-  };
+  function dynamicSort(property) {
+    var sortOrder = 1;
+    if (property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+    }
+    return function (a, b) {
+      var result =
+        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      return result * sortOrder;
+    };
+  }
 
   const listSummoners = () => {
     console.log(userList);
+    console.log(sortedUserList);
   };
+
+  const sortPlayers = useCallback(() => {
+    let tempPlayers = userList.slice();
+    setSortedUserList(tempPlayers.sort(dynamicSort("placement")));
+  }, [userList]);
+
+  useEffect(() => {
+    sortPlayers();
+  }, [sortPlayers, userList]);
 
   return (
     <>
       <ul>
-        {userList.map((user) => (
-          <>
-            <h2 key={user.puuid}>
+        {sortedUserList.map((user) => (
+          <li key={user.puuid}>
+            <h2>
               {user.gameName}#{user.tagLine}
             </h2>
-          </>
+          </li>
         ))}
       </ul>
       <button onClick={grabAllSummoners}>Grab all summoners</button>

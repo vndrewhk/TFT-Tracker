@@ -7,6 +7,7 @@ const RenderMatchData = () => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const matchData = summonerInfoState.matchData;
 
+  const [sortedPlayers, setSortedPlayers] = useState();
   const [puuids, setPuuids] = useState();
   const dispatch = useDispatch();
 
@@ -99,8 +100,11 @@ const RenderMatchData = () => {
   const seePuuid = () => {
     console.log(puuids);
     console.log(summonerInfoState.matchPuuids);
+    console.log(summonerInfoState.matchData.info.participants);
+    console.log(sortedPlayers);
   };
- 
+
+
   return (
     <>
       <h1>Match {matchData.metadata.match_id}</h1>
@@ -108,10 +112,15 @@ const RenderMatchData = () => {
       <h2>Game Length: {gameTime}</h2>
       <h3>Placed: {participantInfo[0].placement}</h3>
       <h3>Game Type: {gameQueue}</h3>
-      {puuids && <RenderSummonerNames></RenderSummonerNames>}
+      {puuids && (
+        <RenderSummonerNames
+          participants={summonerInfoState.matchData.info.participants}
+        ></RenderSummonerNames>
+      )}
       <button onClick={seePuuid}>see puuids</button>
       <button onClick={puuidListUpdate}> puuid update</button>
       <button onClick={storePuuids}> Manually store puuid</button>
+
       {/* <h2>Game Remainder: {gameRemainder}</h2> */}
     </>
   );
