@@ -1,5 +1,5 @@
 const TFTMatches = async (req, res) => {
-  let apiKey = "RGAPI-52f86bcb-fce4-4445-bcb5-309ce121acaf";
+  let apiKey = "RGAPI-88770496-6896-4852-b3a3-b2fafc5cd6a8";
   let URL = "https://na1.api.riotgames.com/tft/league/v1/entries/by-summoner/";
 
   let summonerId = req.query.summonerId;

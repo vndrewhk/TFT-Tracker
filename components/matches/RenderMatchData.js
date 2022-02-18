@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderSummonerNames from "./RenderSummonerNames";
 
-const RenderMatchData = () => {
+const RenderMatchData = (props) => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
-  const matchData = summonerInfoState.matchData;
+  const matchData = props.matchData;
 
-  const [sortedPlayers, setSortedPlayers] = useState();
   const [puuids, setPuuids] = useState();
   const dispatch = useDispatch();
 
@@ -57,34 +56,25 @@ const RenderMatchData = () => {
       return puuidLists;
     };
 
-    // because puuids are so closely linked to the matchdata, should i even put it in redux? the data is already there, intrinsicly
-
     const puuidList = puuidGrabber(matchData);
-    // setPuuids(puuidList);
-
-    // use puuid in summonerInfoState.summonerInfo.puuid
 
     const participantInfo =
-      summonerInfoState.matchData.info.participants.filter(
+      matchData.info.participants.filter(
         (participant) =>
           participant.puuid == summonerInfoState.summonerInfo.puuid
       );
 
-    // {summonerInfoState.matchData.info.participants.placement}
-    // console.log(Object.values(gameDate))
     return { gameTime, gameDate, gameQueue, puuidList, participantInfo };
   };
 
   const { gameTime, gameDate, gameQueue, puuidList, participantInfo } =
     convertData(matchData);
-  //   console.log(puuidList);
   console.log("rendering");
   const puuidListUpdate = () => {
     setPuuids(puuidList);
   };
 
   const storePuuids = useCallback(() => {
-    //6
     console.log("dispatch");
     dispatch(
       summonerActions.updatePuuids({
@@ -93,6 +83,10 @@ const RenderMatchData = () => {
     );
   }, [dispatch, puuids]);
 
+//   useEffect(() => {
+//     puuidListUpdate;
+//   }, []);
+
   useEffect(() => {
     storePuuids();
   }, [puuids, storePuuids]);
@@ -100,28 +94,24 @@ const RenderMatchData = () => {
   const seePuuid = () => {
     console.log(puuids);
     console.log(summonerInfoState.matchPuuids);
-    console.log(summonerInfoState.matchData.info.participants);
-    console.log(sortedPlayers);
+    console.log(matchData.info.participants);
   };
-
 
   return (
     <>
-      <h1>Match {matchData.metadata.match_id}</h1>
+      {/* <h1>Match {matchData.metadata.match_id}</h1> */}
       <h2>Date: {gameDate.toString()}</h2>
       <h2>Game Length: {gameTime}</h2>
       <h3>Placed: {participantInfo[0].placement}</h3>
       <h3>Game Type: {gameQueue}</h3>
       {puuids && (
         <RenderSummonerNames
-          participants={summonerInfoState.matchData.info.participants}
+          participants={matchData.info.participants}
         ></RenderSummonerNames>
       )}
       <button onClick={seePuuid}>see puuids</button>
       <button onClick={puuidListUpdate}> puuid update</button>
       <button onClick={storePuuids}> Manually store puuid</button>
-
-      {/* <h2>Game Remainder: {gameRemainder}</h2> */}
     </>
   );
 };

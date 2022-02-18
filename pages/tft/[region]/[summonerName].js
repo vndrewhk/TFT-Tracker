@@ -10,6 +10,7 @@ const SummonerInfoPage = () => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const { region, summonerName } = router.query;
 
+  // probably should have a renew button that fetches all the matches
   return (
     <>
       {/* <NewSummoner region={region} summonerName={summonerName}></NewSummoner> */}

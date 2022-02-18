@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderMatchData from "./RenderMatchData";
 
-// this file will only grab the data, and store it in redux. RenderMatchData.js will map the data
-const IndividualMatch = () => {
+const IndividualMatch = (props) => {
+  // for each match, send in props of the matchId
   const [matchData, setMatchData] = useState(); //1
   const [matchIsLoading, setMatchIsLoading] = useState(false); //2
   const [success, setSuccess] = useState(false); //3
+  const [toggled, setToggled] = useState(false);
   const matchId = "NA1_4216069806";
-  const dispatch = useDispatch(); //4
+  // const dispatch = useDispatch(); //4
   const summonerInfoState = useSelector((state) => state.summonerInfo); //5
   // map over the values of matchIds in the redux store
 
@@ -25,7 +26,6 @@ const IndividualMatch = () => {
       );
       const matchDetails = await response.json();
       setMatchData(matchDetails.matchData);
-    
       if (!success) {
         setSuccess(true);
       }
@@ -37,39 +37,52 @@ const IndividualMatch = () => {
     // setSuccess(true);
   };
 
-  const storeMatchInfo = useCallback(() => {
-    //6
-    dispatch(
-      summonerActions.updateMatchData({
-        matchData,
-      })
-    );
-  }, [dispatch, matchData]);
-
-  
+  // const storeMatchInfo = useCallback(() => {
+  //   //6
+  //   dispatch(
+  //     summonerActions.updateMatchData({
+  //       matchData,
+  //     })
+  //   );
+  // }, [dispatch, matchData]);
 
   const logInfo = () => {
     console.log(summonerInfoState.matchData);
   };
 
-  useEffect(() => {
-    //7
-    storeMatchInfo();
-  }, [storeMatchInfo]);
+  // useEffect(() => {
+  //   //7
+  //   storeMatchInfo();
+  // }, [storeMatchInfo]);
   console.log("PARENT RENDERING");
   console.log("rendering done");
+
+  useEffect(() => {
+    fetchMatchInfo();
+    if (!success) {
+      setSuccess(true);
+    }
+  }, []);
 
   // const setSuccessButton = () => {
   //   setSuccess(!success);
   // };
+  const toggleMatchData = () => {
+    setToggled(!toggled);
+  };
 
   return (
     <>
+      {/* should rework to have fetchMatchInfo grab every single match, up to 20 and then render them all */}
       {matchIsLoading && <div>Loading Match Details</div>}
-      <button onClick={fetchMatchInfo}>fetch match details</button>
-      <button onClick={logInfo}>log match details</button>
+      <h1 onClick={toggleMatchData}>Match {matchId}</h1>
+      {/* <button onClick={fetchMatchInfo}>fetch match details</button>
+      <button onClick={logInfo}>log match details</button> */}
+      {/* <button onClick={toggleMatchData}>Toggle Match Data</button> */}
       {/* <button onClick={setSuccessButton}> set suc</button> */}
-      {success && <RenderMatchData></RenderMatchData>}
+      {success && toggled && (
+        <RenderMatchData matchData={matchData}></RenderMatchData>
+      )}
     </>
   );
 };

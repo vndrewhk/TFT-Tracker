@@ -51,12 +51,15 @@ const RenderSummonerNames = (props) => {
 
   return (
     <>
+      {/* in the future, will be replaced by a component which shows icon/etc etc */}
       <ul>
         {sortedUserList.map((user) => (
           <li key={user.puuid}>
-            <h2>
-              {user.gameName}#{user.tagLine}
-            </h2>
+            <p>
+            <span>{user.placement}</span> {user.gameName}#{user.tagLine}
+            {/* onClick -> router.push(/{region}/{user.gameName}) */}
+            </p>
+           
           </li>
         ))}
       </ul>
