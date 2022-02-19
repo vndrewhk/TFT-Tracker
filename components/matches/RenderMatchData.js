@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderSummonerNames from "./RenderSummonerNames";
+import styles from "./RenderMatchData.module.css";
 
 const RenderMatchData = (props) => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const matchData = props.matchData;
 
   const [puuids, setPuuids] = useState();
-  const dispatch = useDispatch();
 
   //   parses data and converts to readable format
   const convertData = (matchData) => {
@@ -21,9 +20,9 @@ const RenderMatchData = (props) => {
     const gameDate = new Date(matchData.info.game_datetime);
     // should be altered to make more readable, currently in format of:
     // Sun Feb 13 2022 01:43:58 GMT-0500 (Eastern Standard Time)
-    console.log(gameDate.toString());
 
     //converts queue_id & tft_game_type to string (1090->TFT Game)
+
     const queueConverter = (matchDataInfo) => {
       switch (matchDataInfo.tft_game_type) {
         case "standard":
@@ -50,46 +49,34 @@ const RenderMatchData = (props) => {
         (summoner) => summoner.puuid
       );
 
-      //   can map to the render instead of the state
-
-      //   console.log(puuidList);
       return puuidLists;
     };
 
     const puuidList = puuidGrabber(matchData);
 
-    const participantInfo =
-      matchData.info.participants.filter(
-        (participant) =>
-          participant.puuid == summonerInfoState.summonerInfo.puuid
-      );
-
+    const participantInfo = matchData.info.participants.filter(
+      (participant) => participant.puuid == summonerInfoState.summonerInfo.puuid
+    );
     return { gameTime, gameDate, gameQueue, puuidList, participantInfo };
   };
 
   const { gameTime, gameDate, gameQueue, puuidList, participantInfo } =
     convertData(matchData);
   console.log("rendering");
-  const puuidListUpdate = () => {
-    setPuuids(puuidList);
-  };
 
-  const storePuuids = useCallback(() => {
-    console.log("dispatch");
-    dispatch(
-      summonerActions.updatePuuids({
-        matchPuuids: puuids,
-      })
-    );
-  }, [dispatch, puuids]);
+  // const puuidListUpdate = () => {
+  //   setPuuids(puuidList);
+  // };
 
-//   useEffect(() => {
-//     puuidListUpdate;
-//   }, []);
-
-  useEffect(() => {
-    storePuuids();
-  }, [puuids, storePuuids]);
+  console.log(matchData)
+  // const storePuuids = useCallback(() => {
+  //   console.log("dispatch");
+  //   dispatch(
+  //     summonerActions.updatePuuids({
+  //       matchPuuids: puuids,
+  //     })
+  //   );
+  // }, [dispatch, puuids]);
 
   const seePuuid = () => {
     console.log(puuids);
@@ -98,21 +85,21 @@ const RenderMatchData = (props) => {
   };
 
   return (
-    <>
+    <div className = {styles.matchBox}>
       {/* <h1>Match {matchData.metadata.match_id}</h1> */}
       <h2>Date: {gameDate.toString()}</h2>
       <h2>Game Length: {gameTime}</h2>
       <h3>Placed: {participantInfo[0].placement}</h3>
       <h3>Game Type: {gameQueue}</h3>
-      {puuids && (
+      {
         <RenderSummonerNames
           participants={matchData.info.participants}
         ></RenderSummonerNames>
-      )}
-      <button onClick={seePuuid}>see puuids</button>
-      <button onClick={puuidListUpdate}> puuid update</button>
-      <button onClick={storePuuids}> Manually store puuid</button>
-    </>
+      }
+      {/* <button onClick={seePuuid}>see puuids</button> */}
+      {/* <button onClick={puuidListUpdate}> puuid update</button> */}
+      {/* <button onClick={storePuuids}> Manually store puuid</button> */}
+    </div>
   );
 };
 export default RenderMatchData;

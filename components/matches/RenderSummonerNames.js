@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-
+import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
   const [userList, setUserList] = useState([]);
+  const [success, setSuccess] = useState(false);
+
+  // map, then store in a var, then setstate once?
 
   const grabAllSummoners = () => {
     setUserList([]);
@@ -20,6 +23,7 @@ const RenderSummonerNames = (props) => {
     } catch (err) {
       console.log(err);
     }
+    // return tempList;
   };
 
   function dynamicSort(property) {
@@ -35,11 +39,6 @@ const RenderSummonerNames = (props) => {
     };
   }
 
-  const listSummoners = () => {
-    console.log(userList);
-    console.log(sortedUserList);
-  };
-
   const sortPlayers = useCallback(() => {
     let tempPlayers = userList.slice();
     setSortedUserList(tempPlayers.sort(dynamicSort("placement")));
@@ -49,22 +48,38 @@ const RenderSummonerNames = (props) => {
     sortPlayers();
   }, [sortPlayers, userList]);
 
+  console.log("render cycle");
+  useEffect(() => {
+    grabAllSummoners();
+  }, []);
+
+  const usersList = (
+    <>
+      {sortedUserList.map((user) => (
+        <li key={user.puuid}>
+          <p>
+            <span>{user.placement}</span> {user.gameName}#{user.tagLine}
+            {/* onClick -> router.push(/{region}/{user.gameName}) */}
+          </p>
+        </li>
+      ))}
+    </>
+  );
+
+  const logSummoners = () => {
+    console.log(userList);
+    console.log(userList.length);
+    console.log(sortedUserList);
+  };
+
   return (
     <>
       {/* in the future, will be replaced by a component which shows icon/etc etc */}
-      <ul>
-        {sortedUserList.map((user) => (
-          <li key={user.puuid}>
-            <p>
-            <span>{user.placement}</span> {user.gameName}#{user.tagLine}
-            {/* onClick -> router.push(/{region}/{user.gameName}) */}
-            </p>
-           
-          </li>
-        ))}
-      </ul>
-      <button onClick={grabAllSummoners}>Grab all summoners</button>
-      <button onClick={listSummoners}>List all summoners</button>
+      {sortedUserList.length == 8 && (
+        <ul className={styles.summonerBox}>{usersList}</ul>
+      )}
+
+      <button onClick={logSummoners}>Log all summoners</button>
     </>
   );
 };

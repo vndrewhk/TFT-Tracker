@@ -5,6 +5,7 @@ import IndividualMatch from "../../../components/matches/IndividualMatch";
 import NewSummoner from "../../../components/matches/NewSummoner";
 import RenderMatchData from "../../../components/matches/RenderMatchData";
 
+
 const SummonerInfoPage = () => {
   const router = useRouter();
   const summonerInfoState = useSelector((state) => state.summonerInfo);
@@ -14,7 +15,7 @@ const SummonerInfoPage = () => {
   return (
     <>
       {/* <NewSummoner region={region} summonerName={summonerName}></NewSummoner> */}
-      <BetaNewSummoner
+      <BetaNewSummoner 
         key={summonerInfoState.routerSummoner}
         region={region}
         summonerName={summonerName}
@@ -22,7 +23,11 @@ const SummonerInfoPage = () => {
       {summonerInfoState.matchIds && (
         <>
           {summonerInfoState.matchIds.map((id) => (
-            <IndividualMatch key = {id} matchId = {id}></IndividualMatch>
+            <IndividualMatch
+      
+              key={id}
+              matchId={id}
+            ></IndividualMatch>
           ))}
         </>
       )}

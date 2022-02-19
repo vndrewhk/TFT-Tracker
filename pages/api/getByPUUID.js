@@ -1,5 +1,5 @@
 const getByPUUID = async (req, res) => {
-  let apiKey = "RGAPI-88770496-6896-4852-b3a3-b2fafc5cd6a8";
+  let apiKey = "RGAPI-06131427-0db4-41c7-99ba-bdbf71b99e8e";
   let URL =
     "https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/";
 
