@@ -1,5 +1,6 @@
+import API_KEY from "./API_key";
+
 const SummonerFetch = async (req, res) => {
-  let apiKey = "RGAPI-06131427-0db4-41c7-99ba-bdbf71b99e8e";
   let URL = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-name/";
   let requestURL;
 
@@ -25,7 +26,7 @@ const SummonerFetch = async (req, res) => {
   try {
     const responseData = await fetch(requestURL, {
       headers: {
-        "X-Riot-Token": apiKey,
+        "X-Riot-Token": API_KEY,
       },
     });
 

@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
@@ -75,11 +76,11 @@ const RenderSummonerNames = (props) => {
   return (
     <>
       {/* in the future, will be replaced by a component which shows icon/etc etc */}
-      {sortedUserList.length == 8 && (
+      {sortedUserList.length == 8 ? (
         <ul className={styles.summonerBox}>{usersList}</ul>
-      )}
+      ) :<CircularProgress></CircularProgress>}
 
-      <button onClick={logSummoners}>Log all summoners</button>
+      {/* <button onClick={logSummoners}>Log all summoners</button> */}
     </>
   );
 };

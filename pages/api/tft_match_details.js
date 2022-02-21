@@ -1,3 +1,5 @@
+import API_KEY from "./API_key";
+
 const TFTMatchDetails = async (req, res) => {
   let apiKey = "RGAPI-06131427-0db4-41c7-99ba-bdbf71b99e8e";
   let URL = "https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/";
@@ -9,7 +11,7 @@ const TFTMatchDetails = async (req, res) => {
   try {
     const responseData = await fetch(requestURL, {
       headers: {
-        "X-Riot-Token": apiKey,
+        "X-Riot-Token": API_KEY,
       },
     });
 
