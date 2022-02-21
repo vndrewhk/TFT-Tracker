@@ -1,3 +1,49 @@
 .summonerBox {
-    border: 5px solid red;
+  border: 5px solid red;
+  padding-left: 2%;
+}
+
+.augmentContainer {
+  display: flex;
+  padding: 0px;
+  margin: 0px;
+  flex-direction: row;
+}
+
+.augment {
+  padding-right: 0.5rem;
+}
+
+.unitContainer {
+  display: flex;
+  padding: 0px;
+  margin: 0px;
+  flex-direction: row;
+}
+
+.unit {
+  padding-right: 0.5rem;
+}
+
+.userList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.traitContainer {
+  display: flex;
+  padding: 0px;
+  margin: 0px;
+  flex-direction: row;
+}
+
+.trait {
+  padding: 0px;
+  margin: 0px;
+}
+
+.trait_unitCount{
+    padding: 0px;
+    margin: 0px;
 }

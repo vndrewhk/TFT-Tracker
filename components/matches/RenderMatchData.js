@@ -79,6 +79,7 @@ const RenderMatchData = (props) => {
   // }, [dispatch, puuids]);
 
   const seePuuid = () => {
+    
     console.log(puuids);
     console.log(summonerInfoState.matchPuuids);
     console.log(matchData.info.participants);

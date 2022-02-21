@@ -1,4 +1,5 @@
 import { CircularProgress } from "@mui/material";
+import { style } from "@mui/system";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
@@ -54,18 +55,85 @@ const RenderSummonerNames = (props) => {
     grabAllSummoners();
   }, []);
 
+  const timeConverter = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.round(time % 60);
+    const convertedTime = `${minutes}m${seconds}s`;
+    return convertedTime;
+  };
+
   const usersList = (
     <>
       {sortedUserList.map((user) => (
-        <li key={user.puuid}>
-          <p>
-            <span>{user.placement}</span> {user.gameName}#{user.tagLine}
-            {/* onClick -> router.push(/{region}/{user.gameName}) */}
+        <p key={user.puuid}>
+          {/* summoner names of each player */}
+          <li className={styles.userList}>
+            <h4>
+              <span>{user.placement}</span> {user.gameName}#{user.tagLine}
+              {/* onClick -> router.push(/{region}/{user.gameName}) */}
+            </h4>
+          </li>
+
+          {/* general info */}
+          <p>Round: {user.last_round}</p>
+          <span>{user.gold_left} GOLD Remaining, </span>
+          <span>{user.total_damage_to_players} Damage Dealt</span>
+
+          {/* augments used in game */}
+          <p className={styles.augmentContainer}>
+            {user.augments.map((augment) => (
+              <p
+                className={styles.augment}
+                key={`${augment}_${user.gameName}_${user.augments.indexOf(
+                  augment
+                )}`}
+              >
+                {augment}
+              </p>
+            ))}
           </p>
-        </li>
+
+          {/* traits active */}
+          <p className={styles.traitContainer}>
+            {user.traits.map((trait) => (
+              <p key={`${trait.name}_${user.gameName}`}>
+                {/* convert this to icons */}
+                <p className={styles.trait}>
+                  Tier {trait.tier_total} {trait.name}
+                  <p className={styles.trait_unitCount}>
+                    {" "}
+                    {trait.num_units} Units
+                  </p>
+                </p>
+              </p>
+            ))}
+          </p>
+
+          {/* units used */}
+          <p className={styles.unitContainer}>
+            {user.units.map((unit) => (
+              <p
+                className={styles.unit}
+                key={`${unit.character_id}_${
+                  user.gameName
+                }_${user.units.indexOf(unit)}`}
+              >
+                {unit.character_id}
+              </p>
+            ))}
+          </p>
+
+          {/* time alive */}
+          <span>
+            <p>Time Eliminated</p>
+            <p>{timeConverter(user.time_eliminated)}</p>
+          </span>
+        </p>
       ))}
     </>
   );
+
+  const summonerGameInfo = <>{usersList}</>;
 
   const logSummoners = () => {
     console.log(userList);
@@ -78,9 +146,11 @@ const RenderSummonerNames = (props) => {
       {/* in the future, will be replaced by a component which shows icon/etc etc */}
       {sortedUserList.length == 8 ? (
         <ul className={styles.summonerBox}>{usersList}</ul>
-      ) :<CircularProgress></CircularProgress>}
+      ) : (
+        <CircularProgress></CircularProgress>
+      )}
 
-      {/* <button onClick={logSummoners}>Log all summoners</button> */}
+      <button onClick={logSummoners}>Log all summoners</button>
     </>
   );
 };

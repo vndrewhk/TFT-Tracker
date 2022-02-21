@@ -2,6 +2,7 @@ import API_KEY from "./API_key";
 
 const getByPUUID = async (req, res) => {
   let URL =
+    // https://developer.riotgames.com/apis#tft-summoner-v1/GET_getByPUUID probably switch to this
     "https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/";
 
   let puuid = req.query.puuid;
