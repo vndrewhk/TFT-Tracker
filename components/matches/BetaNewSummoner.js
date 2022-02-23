@@ -7,13 +7,16 @@ import {
   TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import HyperRollStats from "./HyperRollStats";
+
 import RankedStats from "./RankedStats";
 
 const BetaNewSummoner = (props) => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const summonerInfoState = useSelector((state) => state.summonerInfo);
@@ -27,7 +30,7 @@ const BetaNewSummoner = (props) => {
   const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
   const [summonerFound, setSummonerFound] = useState(true);
-  const [matchIds, setMatchIds] = useState({});
+  const [matchIds, setMatchIds] = useState([]);
 
   const [rankedTftVisible, setRankedTftVisible] = useState(true);
   const [hyperRollVisible, setHyperRollVisible] = useState(true);
@@ -78,11 +81,10 @@ const BetaNewSummoner = (props) => {
       );
       const data = await response.json();
 
-      console.log(data.data);
+      console.log(data);
+
       setSummonerFound(true);
-      if (data.data === undefined) {
-        setSummonerFound(false);
-      }
+
       console.log("fetched");
       setIsLoading(false);
 
@@ -95,20 +97,20 @@ const BetaNewSummoner = (props) => {
     setIsLoading(false);
   };
 
-  // here we assume that fetching the user has been successful.
   const fetchMatchDetails = async () => {
-    if (success) {
-      try {
-        const response = await fetch(
-          `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
-        );
-        const data = await response.json();
+    // success temporarily disabled bc of match v4 disabled
+    // if (success) {
+    try {
+      const response = await fetch(
+        `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
+      );
+      const data = await response.json();
 
-        setMatchIds(data.matchIds);
-      } catch (err) {
-        console.log(err);
-      }
+      setMatchIds(data.matchIds);
+    } catch (err) {
+      console.log(err);
     }
+    // }
   };
 
   //if url is /summonerName/matches then call this fn
@@ -119,12 +121,16 @@ const BetaNewSummoner = (props) => {
     const data = await fetchSummoner();
     setSummonerInfo(data);
     try {
-      const matches = await fetch(
-        `/api/tft_matches?region=${region}&summonerId=${data.id}`
-      );
-      const matchData = await matches.json();
-      setMatchInfo(matchData);
-      setSuccess(true);
+      if (data.id) {
+        const matches = await fetch(
+          `/api/tft_matches?region=${region}&summonerId=${data.id}`
+        );
+        const matchData = await matches.json();
+        setMatchInfo(matchData);
+        setSuccess(true);
+      } else {
+        setSummonerFound(false);
+      }
     } catch (err) {
       setSuccess(false);
       console.log(err);
@@ -152,8 +158,9 @@ const BetaNewSummoner = (props) => {
   };
 
   const logId = () => {
-    // console.log(summonerName);
-    // console.log(region);
+    console.log(summonerName);
+    console.log(region);
+    console.log(router.query);
     // console.log(summonerInfo);
     // console.log(matchInfo.matchInfo);
     // console.log(rankedTFTInfo);
@@ -161,7 +168,7 @@ const BetaNewSummoner = (props) => {
     // console.log(success);
 
     console.log(summonerInfoState.summonerInfo);
-    console.log(matchIds);
+    console.log(summonerInfoState.matchIds);
     console.log(summonerInfoState.routerSummoner);
   };
 
@@ -171,6 +178,7 @@ const BetaNewSummoner = (props) => {
   }, []);
 
   //this ensures page reloads component with URL info
+
   useEffect(() => {
     setRegion(summonerInfoState.routerRegion);
     setSummonerName(summonerInfoState.routerSummoner);
@@ -198,9 +206,13 @@ const BetaNewSummoner = (props) => {
   useEffect(() => {
     if (success) {
       summonerStateHandler();
-      //   storeMatchIds();
+      //   fetchMatchDetails();
     }
   }, [success]);
+
+  useEffect(() => {
+    storeMatchIds();
+  }, [matchIds]);
 
   return (
     <>
@@ -238,9 +250,7 @@ const BetaNewSummoner = (props) => {
           </FormControl>
         </Box>
       </form>
-      {/* <Button variant="contained" onClick={fetchSummoner}>
-        Click to fetch
-      </Button> */}
+
       <Button variant="contained" onClick={fetchMatches}>
         Click to fetch
       </Button>
@@ -262,17 +272,15 @@ const BetaNewSummoner = (props) => {
       <Button variant="contained" onClick={fetchMatchDetails}>
         Fetch Match Details
       </Button>
+      <Button variant="contained" onClick={storeMatchIds}>
+        store match ids
+      </Button>
       {isLoading && <h1>Loading...</h1>}
 
-      {/* need to add conditional rendering here, cannot assume the player has played ranked queues */}
-      {/* use filter or map to separate them */}
-
-      {/* need to clear state after checking a new user so it doesnt display old stats */}
       {success && rankedTFTInfo && rankedTftVisible && (
         <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
       )}
-      {/* {success&&rankedTFTInfo&&rankedTftVisible&&<div>{matchIds}</div>} */}
-      {/* would map a component here */}
+
       {success && hyperRollInfo && hyperRollVisible && (
         <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
       )}

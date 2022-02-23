@@ -8,7 +8,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { summonerActions } from "../../../apps/store/summonerInfoSlice";
@@ -38,8 +38,6 @@ const HeaderRoutes = (props) => {
     setRegion(e.target.value);
   };
 
-  // store results in redux store maybe?
-
   const dispatch = useDispatch();
   const summonerInfoState = useSelector((state) => state.summonerInfo);
 
@@ -52,16 +50,25 @@ const HeaderRoutes = (props) => {
     );
   };
 
+  // because the header is ALWAYS on the page, this is a valid solution
+  const setSummonerRedux = useCallback(() => {
+    dispatch(
+      summonerActions.routerSummoner({
+        routerSummoner: router.query.summonerName,
+        routerRegion: router.query.region,
+      })
+    );
+  }, [dispatch, router.query.region, router.query.summonerName]);
 
+  useEffect(() => {
+    setSummonerRedux();
+  }, [setSummonerRedux]);
 
-  // when changing the summonerName through change, change the redux value as well
-  //read the redux in newsummoner so it has to reload
   const redirectHandler = (e) => {
     e.preventDefault();
 
     updateSummonerRedux();
     router.push(`/tft/${region}/${summonerName}`);
-  
   };
 
   return (

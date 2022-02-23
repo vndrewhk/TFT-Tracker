@@ -1,12 +1,12 @@
 import API_KEY from "./API_key";
 
-const TFTMatches = async (req, res) => {
+const TFTIndividualMatch = async (req, res) => {
   let apiKey = "RGAPI-06131427-0db4-41c7-99ba-bdbf71b99e8e";
-  let URL = "https://na1.api.riotgames.com/tft/league/v1/entries/by-summoner/";
+  let URL = "https://americas.api.riotgames.com/tft/match/v1/matches/";
+  //   b2_-gkNZhsVXT_1nTbcTWaGD0HcDvUhXffYuQYcLZxu0AwE4VAR3teWyakfuxUIeWUoQ8ugLtnZvzw/ids?count=20
 
-  let summonerId = req.query.summonerId;
-  let requestURL = `${URL}${summonerId}`;
-
+  let matchId = req.query.matchId;
+  let requestURL = `${URL}${matchId}`;
   try {
     const responseData = await fetch(requestURL, {
       headers: {
@@ -15,15 +15,15 @@ const TFTMatches = async (req, res) => {
     });
 
     if (!responseData.ok) {
-      res.status(200).json({ message: "!ok" });
+      res.status(201).json({ message: "!ok" });
       throw new Error("Something went wrong!");
     }
     if (responseData.ok) {
-      const matchInfo = await responseData.json();
+      const matchData = await responseData.json();
 
       //res status is the one that returns the info
 
-      res.status(200).json({ matchInfo });
+      res.status(200).json({ matchData });
       // res.status(200).json({requestType})
       //return matchInfo doesnt do anything
     }
@@ -35,4 +35,4 @@ const TFTMatches = async (req, res) => {
   res.end();
 };
 
-export default TFTMatches;
+export default TFTIndividualMatch;

@@ -1,5 +1,6 @@
+import API_KEY from "./API_key";
+
 const SummonerFetch = async (req, res) => {
-  let apiKey = "RGAPI-e214c86c-a32c-4ea0-bc9f-7d5ec024902e";
   let URL = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-name/";
   let requestURL;
 
@@ -25,13 +26,12 @@ const SummonerFetch = async (req, res) => {
   try {
     const responseData = await fetch(requestURL, {
       headers: {
-        "X-Riot-Token": apiKey,
+        "X-Riot-Token": API_KEY,
       },
     });
 
     if (!responseData.ok) {
-      res.status(200).json({ message: "!ok" });
-      throw new Error("Something went wrong!");
+      res.status(200).json({ data });
     }
     if (responseData.ok) {
       const data = await responseData.json();
@@ -39,9 +39,7 @@ const SummonerFetch = async (req, res) => {
       res.status(200).json({ data });
     }
   } catch (err) {
-    res.status(200).json({ message: "err" });
-    console.log(err);
-    return err;
+    res.status(500).json({ data });
   }
   res.end();
 };

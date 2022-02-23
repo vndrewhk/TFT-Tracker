@@ -2,11 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialSummonerState = {
   summonerInfo: {},
-  matchInfo: [{}],
+  matchIds: [],
+  matchData: [{}],
+  matchPuuids: [],
+  requestPuuid: "",
   gameMode: "TFT",
   routerSummoner: "",
   routerRegion: "",
   isLoading: false,
+  success: false,
 };
 
 const summonerInfoSlice = createSlice({
@@ -16,8 +20,8 @@ const summonerInfoSlice = createSlice({
     replaceSummoner(state, action) {
       state.summonerInfo = action.payload.summonerInfo;
     },
-    replaceMatchInfo(state, action) {
-      state.matchInfo = action.payload.matchInfo;
+    replaceMatchIds(state, action) {
+      state.matchIds = action.payload.matchIds;
     },
     updateGameMode(state, action) {
       state.gameMode = action.payload.gameMode;
@@ -26,7 +30,18 @@ const summonerInfoSlice = createSlice({
       state.routerSummoner = action.payload.routerSummoner;
       state.routerRegion = action.payload.routerRegion;
     },
- 
+    updateMatchData(state, action) {
+      state.matchData = action.payload.matchData;
+    },
+    updatePuuids(state, action) {
+      state.matchPuuids = action.payload.matchPuuids;
+    },
+    toggleSuccess(state, action) {
+      state.success = action.payload.success;
+    },
+    replaceRequestPuuid(state, action) {
+      state.requestPuuid = action.payload.requestPuuid;
+    },
   },
 });
 
