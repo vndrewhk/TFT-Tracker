@@ -1,6 +1,8 @@
 import { CircularProgress } from "@mui/material";
 import { style } from "@mui/system";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import fetchCDragon from "../../pages/api/fetchCDragon";
 import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
@@ -82,18 +84,29 @@ const RenderSummonerNames = (props) => {
           {/* augments used in game */}
           <p className={styles.augmentContainer}>
             {user.augments.map((augment) => (
-              <p
-                className={styles.augment}
-                key={`${augment}_${user.gameName}_${user.augments.indexOf(
-                  augment
-                )}`}
-              >
-                {augment}
-              </p>
+              <>
+                <p
+                  className={styles.augment}
+                  key={`${augment}_${user.gameName}_${user.augments.indexOf(
+                    augment
+                  )}`}
+                >
+                  {augment.replace("TFT6_Augment_", "").toLowerCase()}
+                </p>
+                <Image
+                  src={`https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/${augment
+                    .replace("TFT6_Augment_", "")
+                    .toLowerCase()}.tft_set6.png`}
+                  alt={augment}
+                  width={100}
+                  height={100}
+                ></Image>
+              </>
             ))}
           </p>
 
           {/* traits active */}
+          {/* https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/celestialblessing1.tft_set6.png */}
           <p className={styles.traitContainer}>
             {user.traits.map((trait) => (
               <p key={`${trait.name}_${user.gameName}`}>
@@ -101,7 +114,6 @@ const RenderSummonerNames = (props) => {
                 <p className={styles.trait}>
                   Tier {trait.tier_total} {trait.name}
                   <p className={styles.trait_unitCount}>
-                    {" "}
                     {trait.num_units} Units
                   </p>
                 </p>
@@ -118,7 +130,14 @@ const RenderSummonerNames = (props) => {
                   user.gameName
                 }_${user.units.indexOf(unit)}`}
               >
-                {unit.character_id}
+                {unit.character_id.toLowerCase()}
+
+                {/* <Image
+                  src={`https://raw.communitydragon.org/latest/game/assets/characters/${unit.character_id.toLowerCase()}/hud/${unit.character_id.toLowerCase()}.tft_set6_stage2.png`}
+                  alt={unit.character_id}
+                  width={50}
+                  height={50}
+                ></Image> */}
               </p>
             ))}
           </p>
@@ -133,22 +152,62 @@ const RenderSummonerNames = (props) => {
     </>
   );
 
-  const summonerGameInfo = <>{usersList}</>;
+  // const summonerGameInfo = <>{usersList}</>;
+
+  const fetchUnitInfo = async (unit) => {
+    // success temporarily disabled bc of match v4 disabled
+    // if (success) {
+    try {
+      const response = await fetch(`/api/fetchCDragon?unit=${unit}`);
+      const unitInfo = await response.json();
+
+      return unitInfo;
+    } catch (err) {
+      console.log(err);
+    }
+    // }
+  };
+
+  const unitImageHandler = async (unit) => {
+    const unitInfo = await fetchUnitInfo(unit);
+    console.log(unitInfo.unitInfo["{05cd1d9e}"]);
+
+    for (const hash in unitInfo.unitInfo) {
+      // console.log(hash);
+      console.log(unitInfo.unitInfo[hash]);
+      for (const key in unitInfo.unitInfo[hash]) {
+        // console.log(key);
+        if (key === "PortraitIcon") {
+          console.log(unitInfo.unitInfo[hash][key].toLowerCase().replace("dds","png"));
+          return unitInfo.unitInfo[hash][key].toLowerCase().replace("dds","png")
+        }
+      }
+    }
+
+  };
 
   const logSummoners = () => {
     console.log(userList);
     console.log(userList.length);
     console.log(sortedUserList);
+    // console.log(sortedUserList)
   };
 
   return (
     <>
+      <button onClick={unitImageHandler.bind(null, "tft6_ahri")}>fetch</button>
       {/* in the future, will be replaced by a component which shows icon/etc etc */}
       {sortedUserList.length == 8 ? (
         <ul className={styles.summonerBox}>{usersList}</ul>
       ) : (
         <CircularProgress></CircularProgress>
       )}
+      {/* <Image
+        src="https://raw.communitydragon.org/latest/game/assets/characters/tft6_nocturne/hud/tft6_nocturne.tft_set6_stage2.png"
+        alt="Picture of the author"
+        width={50}
+        height={50}
+      ></Image> */}
 
       <button onClick={logSummoners}>Log all summoners</button>
     </>
