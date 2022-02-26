@@ -216,7 +216,7 @@ const BetaNewSummoner = (props) => {
 
   return (
     <>
-      <form onSubmit={fetchSummoner}>
+      {/* <form onSubmit={fetchSummoner}>
         <Box>
           <TextField
             id="input-with-sx"
@@ -249,14 +249,14 @@ const BetaNewSummoner = (props) => {
             </Select>
           </FormControl>
         </Box>
-      </form>
+      </form> */}
 
-      <Button variant="contained" onClick={fetchMatches}>
+      {/* <Button variant="contained" onClick={fetchMatches}>
         Click to fetch
       </Button>
       <Button variant="contained" onClick={logId}>
         Click to log current info
-      </Button>
+      </Button> */}
       {/* <Button variant="contained" onClick={summonerBlurHandler}>
         Click to record summoner name
       </Button>
@@ -272,9 +272,7 @@ const BetaNewSummoner = (props) => {
       <Button variant="contained" onClick={fetchMatchDetails}>
         Fetch Match Details
       </Button>
-      <Button variant="contained" onClick={storeMatchIds}>
-        store match ids
-      </Button>
+      
       {isLoading && <h1>Loading...</h1>}
 
       {success && rankedTFTInfo && rankedTftVisible && (
