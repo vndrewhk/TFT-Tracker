@@ -99,8 +99,10 @@ const RenderSummonerNames = (props) => {
           ][key]
             .toLowerCase()
             .replace("dds", "png")}`;
-
-          tempUnits.push(unitObj);
+          // console.log(tempUnits.indexOf(unitObj));
+          if (tempUnits.indexOf(unitObj) === -1) {
+            tempUnits.push(unitObj);
+          }
         }
       }
     }
