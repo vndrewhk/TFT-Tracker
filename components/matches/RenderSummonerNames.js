@@ -87,10 +87,36 @@ const RenderSummonerNames = (props) => {
   let tempUnits = [];
   const unitImageHandler = async (unit) => {
     const unitInfo = await fetchUnitInfo(unit);
+    // console.log(unitInfo);
     for (const hash in unitInfo.unitInfo) {
       // console.log(unitInfo.unitInfo[hash]);
       for (const key in unitInfo.unitInfo[hash]) {
         if (key === "PortraitIcon") {
+          // let unitName = {};
+          // unitName.name = unit;
+
+          // let unitUrl = {};
+          // // unitObj["unit"] = unit;
+          // unitUrl[
+          //   "unitUrl"
+          // ] = `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
+          //   hash
+          // ][key]
+          //   .toLowerCase()
+          //   .replace("dds", "png")}`;
+          // // console.log(tempUnits.indexOf(unitObj));
+
+          // const unitObj = { unitName, unitUrl };
+
+          // const unitObj = {
+          //   unit: unit,
+          //   unitUrl: `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
+          //     hash
+          //   ][key]
+          //     .toLowerCase()
+          //     .replace("dds", "png")}`,
+          // };
+
           let unitObj = {};
           unitObj[
             unit
@@ -99,10 +125,26 @@ const RenderSummonerNames = (props) => {
           ][key]
             .toLowerCase()
             .replace("dds", "png")}`;
-          // console.log(tempUnits.indexOf(unitObj));
-          if (tempUnits.indexOf(unitObj) === -1) {
+
+          // do i even want to do it this way? i need to make sure the units keep the items that they used so each one must have its own id...
+
+          // this makes sure only one entry per array of characters
+          // const found = tempUnits.some((unitObj) => unitObj.unit === unit);
+          // if (!found) {
+          //   tempUnits.push(unitObj);
+          // }
+          const found = tempUnits.some((unitObj) => unitObj[0] === unit);
+          if (!found) {
             tempUnits.push(unitObj);
           }
+
+          // maybe like this?
+          const object1 = {
+            tft6_vex: 'vexURL',
+            b: 42,
+            c: false
+          };
+          
         }
       }
     }
@@ -189,6 +231,14 @@ const RenderSummonerNames = (props) => {
                 }_${user.units.indexOf(unit)}`}
               >
                 {unit.character_id.toLowerCase()}
+                {/* return unitUrl of the object that matches unit:unit */}
+
+                {/* <Image
+                  src={unitPortraits[1].unitUrl}
+                  alt={unit.character_id}
+                  width={50}
+                  height={50}
+                ></Image> */}
 
                 {/* {unitImageHandler(unit.character_id.toLowerCase())} */}
                 {/* <Image
