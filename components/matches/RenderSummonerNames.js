@@ -84,7 +84,7 @@ const RenderSummonerNames = (props) => {
 
   // should actually fetch every unit and then store it ONCE
   // need to prevent adding a duplicate, or filter it
-  let tempUnits = [];
+  let tempUnits = {};
   const unitImageHandler = async (unit) => {
     const unitInfo = await fetchUnitInfo(unit);
     // console.log(unitInfo);
@@ -92,59 +92,28 @@ const RenderSummonerNames = (props) => {
       // console.log(unitInfo.unitInfo[hash]);
       for (const key in unitInfo.unitInfo[hash]) {
         if (key === "PortraitIcon") {
-          // let unitName = {};
-          // unitName.name = unit;
+          // let unitName;
+          // unitName = unit;
 
-          // let unitUrl = {};
+          // let unitUrl;
           // // unitObj["unit"] = unit;
-          // unitUrl[
-          //   "unitUrl"
-          // ] = `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
+          // unitUrl = `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
           //   hash
           // ][key]
           //   .toLowerCase()
           //   .replace("dds", "png")}`;
           // // console.log(tempUnits.indexOf(unitObj));
 
-          // const unitObj = { unitName, unitUrl };
+          // const unitObj = { unit, unitUrl };
 
-          // const unitObj = {
-          //   unit: unit,
-          //   unitUrl: `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
-          //     hash
-          //   ][key]
-          //     .toLowerCase()
-          //     .replace("dds", "png")}`,
-          // };
-
-          let unitObj = {};
-          unitObj[
-            unit
-          ] = `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
-            hash
-          ][key]
-            .toLowerCase()
-            .replace("dds", "png")}`;
-
-          // do i even want to do it this way? i need to make sure the units keep the items that they used so each one must have its own id...
-
-          // this makes sure only one entry per array of characters
-          // const found = tempUnits.some((unitObj) => unitObj.unit === unit);
-          // if (!found) {
-          //   tempUnits.push(unitObj);
-          // }
-          const found = tempUnits.some((unitObj) => unitObj[0] === unit);
-          if (!found) {
-            tempUnits.push(unitObj);
-          }
-
-          // maybe like this?
-          const object1 = {
-            tft6_vex: 'vexURL',
-            b: 42,
-            c: false
+          tempUnits = {
+            ...tempUnits,
+            [unit]: `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
+              hash
+            ][key]
+              .toLowerCase()
+              .replace("dds", "png")}`,
           };
-          
         }
       }
     }
