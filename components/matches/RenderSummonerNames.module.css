@@ -4,6 +4,7 @@
 }
 
 .augmentContainer {
+  border: 1px solid black;
   display: flex;
   padding: 0px;
   margin: 0px;
@@ -15,6 +16,7 @@
 }
 
 .unitContainer {
+  border: 1px solid blue;
   display: flex;
   padding: 0px;
   margin: 0px;
