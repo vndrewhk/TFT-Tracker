@@ -8,6 +8,7 @@ const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [augmentPortraits, setAugmentPortraits] = useState([]);
+  const [unitsLoaded, setUnitsLoaded] = useState(false);
   const [traitPortraits, setTraitPortraits] = useState([]);
   const [unitPortraits, setUnitPortraits] = useState([]);
   const [unitsFetched, setUnitsFetched] = useState(false);
@@ -118,7 +119,9 @@ const RenderSummonerNames = (props) => {
       }
     }
     // console.log(tempUnits);
+
     setUnitPortraits(tempUnits);
+    setUnitsLoaded(true);
   };
 
   if (sortedUserList.length === 8 && !unitsFetched) {
@@ -162,14 +165,14 @@ const RenderSummonerNames = (props) => {
                 >
                   {augment.replace("TFT6_Augment_", "").toLowerCase()}
                 </p>
-                <Image
+                {/* <Image
                   src={`https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/${augment
                     .replace("TFT6_Augment_", "")
                     .toLowerCase()}.tft_set6.png`}
                   alt={augment}
                   width={100}
                   height={100}
-                ></Image>
+                ></Image> */}
               </>
             ))}
           </p>
@@ -193,21 +196,33 @@ const RenderSummonerNames = (props) => {
           {/* units used */}
           <p className={styles.unitContainer}>
             {user.units.map((unit) => (
-              <p
+              <div
                 className={styles.unit}
                 key={`${unit.character_id}_${
                   user.gameName
                 }_${user.units.indexOf(unit)}`}
               >
-                {unit.character_id.toLowerCase()}
+                {!unitsLoaded && unit.character_id.toLowerCase()}
                 {/* return unitUrl of the object that matches unit:unit */}
 
-                {/* <Image
-                  src={unitPortraits[1].unitUrl}
-                  alt={unit.character_id}
-                  width={50}
-                  height={50}
-                ></Image> */}
+                {Object.keys(unitPortraits).length > 2 && (
+                  // <>{unitPortraits[unit.character_id.toLowerCase()]}</>
+                  <div className={styles.unitBox}>
+                    <img
+                      src={unitPortraits[unit.character_id.toLowerCase()]}
+                      alt="Logo"
+                      className={styles.unitPortrait}
+                    />
+                    <p>{unit.character_id.split("_")[1]}</p>
+                  </div>
+                  // <Image
+                  //   src={unitPortraits[unit.character_id.toLowerCase()]}
+                  //   alt={unit.character_id}
+                  //   props = {unitPortraits[unit.character_id.toLowerCase()]}
+                  //   width={50}
+                  //   height={50}
+                  // ></Image>
+                )}
 
                 {/* {unitImageHandler(unit.character_id.toLowerCase())} */}
                 {/* <Image
@@ -216,7 +231,7 @@ const RenderSummonerNames = (props) => {
                   width={50}
                   height={50}
                 ></Image> */}
-              </p>
+              </div>
             ))}
           </p>
 
@@ -237,6 +252,8 @@ const RenderSummonerNames = (props) => {
     console.log(userList.length);
     console.log(sortedUserList);
     console.log(unitPortraits);
+    // console.log(unitPortraits["tft6_ekko"]);
+    console.log(Object.keys(unitPortraits).length);
     // console.log(sortedUserList)
   };
 

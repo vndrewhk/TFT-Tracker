@@ -43,7 +43,27 @@
   margin: 0px;
 }
 
-.trait_unitCount{
-    padding: 0px;
-    margin: 0px;
+.trait_unitCount {
+  padding: 0px;
+  margin: 0px;
 }
+
+.unitPortrait {
+  display: flex;
+  padding: 0px;
+  margin: 0px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.unitBox {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  padding: 0px;
+  align-items: center;
+}
+/* .unitPortrait{
+  font-size: px;
+} */
