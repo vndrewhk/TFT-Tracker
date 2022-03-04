@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import BetaNewSummoner from "../../../components/matches/BetaNewSummoner";
-import IndividualMatch from "../../../components/matches/IndividualMatch";
 import NewSummoner from "../../../components/matches/NewSummoner";
+import IndividualMatch from "../../../components/matches/IndividualMatch";
+// import NewSummoner from "../../../components/matches/NewSummoner";
 import RenderMatchData from "../../../components/matches/RenderMatchData";
 
 
@@ -15,11 +15,11 @@ const SummonerInfoPage = () => {
   return (
     <>
       {/* <NewSummoner region={region} summonerName={summonerName}></NewSummoner> */}
-      <BetaNewSummoner 
+      <NewSummoner 
         key={summonerInfoState.routerSummoner}
         region={region}
         summonerName={summonerName}
-      ></BetaNewSummoner>
+      ></NewSummoner>
       {summonerInfoState.matchIds && (
         <>
           {summonerInfoState.matchIds.map((id) => (

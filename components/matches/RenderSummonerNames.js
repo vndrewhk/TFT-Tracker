@@ -26,6 +26,7 @@ const RenderSummonerNames = (props) => {
     try {
       const response = await fetch(`/api/getByPUUID?puuid=${player.puuid}`);
       const userDetails = await response.json();
+      console.log(userDetails);
       setUserList((prevState) => [
         ...prevState,
         { ...player, ...userDetails.userInfo },
@@ -143,7 +144,8 @@ const RenderSummonerNames = (props) => {
           {/* summoner names of each player */}
           <li className={styles.userList}>
             <h4>
-              <span>{user.placement}</span> {user.gameName}#{user.tagLine}
+              {/* we dont use #{user.tagLine} because api not provided from Riot */}
+              <span>{user.placement} - </span> {user.name}
               {/* onClick -> router.push(/{region}/{user.gameName}) */}
             </h4>
           </li>
@@ -159,7 +161,7 @@ const RenderSummonerNames = (props) => {
               <>
                 <p
                   className={styles.augment}
-                  key={`${augment}_${user.gameName}_${user.augments.indexOf(
+                  key={`${augment}_${user.name}_${user.augments.indexOf(
                     augment
                   )}`}
                 >
@@ -181,7 +183,7 @@ const RenderSummonerNames = (props) => {
           {/* https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/celestialblessing1.tft_set6.png */}
           <p className={styles.traitContainer}>
             {user.traits.map((trait) => (
-              <p key={`${trait.name}_${user.gameName}`}>
+              <p key={`${trait.name}_${user.name}`}>
                 {/* convert this to icons */}
                 <p className={styles.trait}>
                   Tier {trait.tier_total} {trait.name}
@@ -198,9 +200,9 @@ const RenderSummonerNames = (props) => {
             {user.units.map((unit) => (
               <div
                 className={styles.unit}
-                key={`${unit.character_id}_${
-                  user.gameName
-                }_${user.units.indexOf(unit)}`}
+                key={`${unit.character_id}_${user.name}_${user.units.indexOf(
+                  unit
+                )}`}
               >
                 {!unitsLoaded && unit.character_id.toLowerCase()}
                 {/* return unitUrl of the object that matches unit:unit */}
