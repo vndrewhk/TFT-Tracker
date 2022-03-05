@@ -260,23 +260,15 @@ const RenderSummonerNames = (props) => {
   };
 
   return (
-    <>
-      <button onClick={unitImageHandler.bind(null, "tft6_ahri")}>fetch</button>
-      {/* in the future, will be replaced by a component which shows icon/etc etc */}
+    <div>
       {sortedUserList.length == 8 ? (
         <ul className={styles.summonerBox}>{usersList}</ul>
       ) : (
         <CircularProgress></CircularProgress>
       )}
-      {/* <Image
-        src="https://raw.communitydragon.org/latest/game/assets/characters/tft6_nocturne/hud/tft6_nocturne.tft_set6_stage2.png"
-        alt="Picture of the author"
-        width={50}
-        height={50}
-      ></Image> */}
 
       <button onClick={logSummoners}>Log all summoners</button>
-    </>
+    </div>
   );
 };
 export default RenderSummonerNames;

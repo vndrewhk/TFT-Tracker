@@ -1,7 +1,7 @@
 const RankedStats = (props) => {
   return (
     <>
-      <h1>Summoner Name: {props.matchInfo.summonerName}</h1>
+    
       <div>
         <h2>Rank Type: {props.matchInfo.queueType}</h2>
         <h3>

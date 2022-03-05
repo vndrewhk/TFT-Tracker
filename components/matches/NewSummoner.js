@@ -1,19 +1,13 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import HyperRollStats from "./HyperRollStats";
-
 import RankedStats from "./RankedStats";
+
+import styles from "./NewSummoner.module.css";
 
 const NewSummoner = (props) => {
   const router = useRouter();
@@ -31,26 +25,13 @@ const NewSummoner = (props) => {
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
   const [summonerFound, setSummonerFound] = useState(true);
   const [matchIds, setMatchIds] = useState([]);
+  const [matchesLoading, setMatchesLoading] = useState(false);
 
   const [rankedTftVisible, setRankedTftVisible] = useState(true);
   const [hyperRollVisible, setHyperRollVisible] = useState(true);
 
-  const toggleRanked = () => {
-    setRankedTftVisible(!rankedTftVisible);
-  };
-  const toggleHyperRoll = () => {
-    setHyperRollVisible(!hyperRollVisible);
-  };
+  const [matchToggle, setMatchToggle] = useState(false);
 
-  const summonerRef = useRef();
-
-  const summonerBlurHandler = () => {
-    setSummonerName(summonerRef.current.value);
-  };
-
-  const regionChangeHandler = (e) => {
-    setRegion(e.target.value);
-  };
   const summonerStateHandler = () => {
     dispatch(
       summonerActions.replaceSummoner({
@@ -100,6 +81,8 @@ const NewSummoner = (props) => {
   const fetchMatchDetails = async () => {
     // success temporarily disabled bc of match v4 disabled
     // if (success) {
+    setMatchesLoading(true);
+
     try {
       const response = await fetch(
         `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
@@ -110,7 +93,12 @@ const NewSummoner = (props) => {
     } catch (err) {
       console.log(err);
     }
-    // }
+    setMatchesLoading(false);
+    setMatchToggle(true);
+  };
+
+  const overviewButtonHandler = () => {
+    setMatchToggle(false);
   };
 
   //if url is /summonerName/matches then call this fn
@@ -150,27 +138,6 @@ const NewSummoner = (props) => {
     });
     setHyperRollInfo(hyperRollFiltered[0]);
   }, [matchInfo.matchInfo]);
-
-  const assignInfo = () => {
-    assignHyperRollInfo();
-    assignRankedInfo();
-    summonerStateHandler();
-  };
-
-  const logId = () => {
-    console.log(summonerName);
-    console.log(region);
-    console.log(router.query);
-    // console.log(summonerInfo);
-    // console.log(matchInfo.matchInfo);
-    // console.log(rankedTFTInfo);
-    // console.log(hyperRollInfo);
-    // console.log(success);
-
-    console.log(summonerInfoState.summonerInfo);
-    console.log(summonerInfoState.matchIds);
-    console.log(summonerInfoState.routerSummoner);
-  };
 
   //   this makes it so that it will fetch the info on first load of page
   useEffect(() => {
@@ -215,8 +182,81 @@ const NewSummoner = (props) => {
   }, [matchIds]);
 
   return (
-    <>
-      {/* <form onSubmit={fetchSummoner}>
+    <div className={styles.summonerInfoBox}>
+      <div className={styles.pageButton}>
+        <Button variant="contained" onClick={overviewButtonHandler}>
+          overview
+        </Button>
+
+        <Button variant="contained" onClick={fetchMatchDetails}>
+          matches
+        </Button>
+      </div>
+
+      {isLoading && <h1>Loading...</h1>}
+
+      <div className={styles.summonerInfo}>
+        <h1>{summonerName}</h1>
+        {/*  ICON:{summonerInfoState.summonerInfo.profileIconId} */}
+        {success && rankedTFTInfo && rankedTftVisible && (
+          <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
+        )}
+
+        {success && hyperRollInfo && hyperRollVisible && (
+          <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
+        )}
+
+        {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
+          <h1>Summoner not found! Did you select the correct region?</h1>
+        )}
+        {matchesLoading && <CircularProgress></CircularProgress>}
+        {success && !rankedTFTInfo && !hyperRollInfo && (
+          <h1>No Ranked Info Found for {summonerName}!</h1>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default NewSummoner;
+
+// const toggleRanked = () => {
+//   setRankedTftVisible(!rankedTftVisible);
+// };
+// const toggleHyperRoll = () => {
+//   setHyperRollVisible(!hyperRollVisible);
+// };
+// const summonerBlurHandler = () => {
+//   setSummonerName(summonerRef.current.value);
+// };
+
+// const regionChangeHandler = (e) => {
+//   setRegion(e.target.value);
+// };
+
+// const assignInfo = () => {
+//   assignHyperRollInfo();
+//   assignRankedInfo();
+//   summonerStateHandler();
+// };
+
+// const logId = () => {
+//   console.log(summonerName);
+//   console.log(region);
+//   console.log(router.query);
+//   // console.log(summonerInfo);
+//   // console.log(matchInfo.matchInfo);
+//   // console.log(rankedTFTInfo);
+//   // console.log(hyperRollInfo);
+//   // console.log(success);
+
+//   console.log(summonerInfoState.summonerInfo);
+//   console.log(summonerInfoState.matchIds);
+//   console.log(summonerInfoState.routerSummoner);
+// };
+
+{
+  /* <form onSubmit={fetchSummoner}>
         <Box>
           <TextField
             id="input-with-sx"
@@ -249,49 +289,30 @@ const NewSummoner = (props) => {
             </Select>
           </FormControl>
         </Box>
-      </form> */}
+      </form> */
+}
 
-      {/* <Button variant="contained" onClick={fetchMatches}>
+{
+  /* <Button variant="contained" onClick={fetchMatches}>
         Click to fetch
       </Button>
       <Button variant="contained" onClick={logId}>
         Click to log current info
-      </Button> */}
-      {/* <Button variant="contained" onClick={summonerBlurHandler}>
+      </Button> */
+}
+{
+  /* <Button variant="contained" onClick={summonerBlurHandler}>
         Click to record summoner name
       </Button>
       <Button variant="contained" onClick={assignInfo}>
         Click to assign INFO
-      </Button> */}
-      {/* <Button variant="contained" onClick={toggleRanked}>
+      </Button> */
+}
+{
+  /* <Button variant="contained" onClick={toggleRanked}>
         Toggle RANKED
       </Button>
       <Button variant="contained" onClick={toggleHyperRoll}>
         Toggle HYPERROLL
-      </Button> */}
-      <Button variant="contained" onClick={fetchMatchDetails}>
-        Fetch Match Details
-      </Button>
-      
-      {isLoading && <h1>Loading...</h1>}
-
-      {success && rankedTFTInfo && rankedTftVisible && (
-        <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
-      )}
-
-      {success && hyperRollInfo && hyperRollVisible && (
-        <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
-      )}
-
-      {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
-        <h1>Summoner not found! Did you select the correct region?</h1>
-      )}
-
-      {success && !rankedTFTInfo && !hyperRollInfo && (
-        <h1>No Ranked Info Found!</h1>
-      )}
-    </>
-  );
-};
-
-export default NewSummoner;
+      </Button> */
+}

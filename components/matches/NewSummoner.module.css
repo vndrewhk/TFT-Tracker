@@ -1,0 +1,20 @@
+.summonerInfoBox {
+  border: 2px red solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summonerInfo {
+  padding-right: 35rem;
+}
+
+.matchHistory {
+  margin-right: 39rem;
+}
+
+.pageButton {
+  flex-direction: row;
+  display: flex;
+  margin-right: 39rem;
+}

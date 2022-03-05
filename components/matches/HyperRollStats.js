@@ -1,7 +1,7 @@
 const HyperRollStats = (props) => {
   return (
     <>
-      <h1>Summoner Name: {props.matchInfo.summonerName}</h1>
+   
       <div>
         <h2>Rank Type: {props.matchInfo.queueType}</h2>
         <p>LP: {props.matchInfo.ratedRating}</p>

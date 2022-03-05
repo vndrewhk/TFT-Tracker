@@ -22,6 +22,7 @@ const SummonerInfoPage = () => {
       ></NewSummoner>
       {summonerInfoState.matchIds && (
         <>
+        <h2>Match History</h2>
           {summonerInfoState.matchIds.map((id) => (
             <IndividualMatch
       
