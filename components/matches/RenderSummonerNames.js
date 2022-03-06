@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import fetchCDragon from "../../pages/api/fetchCDragon";
-import itemList from "../assets/itemList";
 import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
@@ -61,7 +60,7 @@ const RenderSummonerNames = (props) => {
     sortPlayers();
   }, [sortPlayers, userList]);
 
-  console.log("render cycle");
+  // console.log("render cycle");
   useEffect(() => {
     grabAllSummoners();
   }, []);
@@ -211,8 +210,19 @@ const RenderSummonerNames = (props) => {
                     <p>{unit.character_id.split("_")[1]}</p>
                     {unit.items.map((item) => (
                       <>
-                        {/* {item} */}
-                        {!itemList[item] && <span>Item ID: {item}</span>}
+                        {item}
+                        {summonerInfoState.items[item] && (
+                          <img
+                            src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
+                              item
+                            ].icon
+                              .toLowerCase()
+                              .replace("dds", "png")}`}
+                            alt="Logo"
+                            className={styles.unitPortrait}
+                          />
+                        )}
+                        {/* {!itemList[item] && <span>Item ID: {item}</span>}
                         {itemList[item] && (
                           <img
                             src={`https://raw.communitydragon.org/latest/game/${itemList[
@@ -222,8 +232,7 @@ const RenderSummonerNames = (props) => {
                               .replace("dds", "png")}`}
                             alt="Logo"
                             className={styles.unitPortrait}
-                          />
-                        )}
+                          /> */}
                       </>
                       // https://raw.communitydragon.org/latest/cdragon/tft/en_us.json
                     ))}

@@ -19,17 +19,27 @@ const SummonerInfoPage = () => {
       );
       if (response.ok) {
         const items = await response.json();
-
         console.log(items);
-        const sortedItems = items.items.sort((a, b) => (a.id > b.id ? 1 : -1));
-        console.log(sortedItems);
-        itemHandler(sortedItems);
+        itemTransformer(items.items);
+        // const sortedItems = items.items.sort((a, b) => (a.id > b.id ? 1 : -1));
+        // console.log(sortedItems);
+        // itemHandler(sortedItems);
         return items;
       }
     } catch (err) {
       console.log(err);
     }
   }, []);
+
+  let tempArray = [];
+  const itemTransformer = (items) => {
+    for (let i = 0; i < items.length; i++) {
+      tempArray = { ...tempArray, [items[i].id]: { ...items[i] } };
+    }
+    console.log(tempArray);
+    itemHandler(tempArray);
+    return tempArray;
+  };
 
   // might have to abs value this when implementing, for some reason id is - and +
   const itemList = {

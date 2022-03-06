@@ -44,6 +44,41 @@ const itemList = {
     icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Sparring_Gloves.dds",
     index: 579,
   },
+  [38]: {
+    icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Spatula/Set6/Arcanist.TFT_Set6.dds",
+    id: 38,
+    name: "Arcanist Emblem",
+    unique: true,
+  },
+  [89]: {
+    icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Spatula/Set6/Assassin.TFT_Set6.dds",
+    id: 89,
+    name: "Assassin Emblem",
+    unique: true,
+  },
+};
+
+
+const unitImageHandler = async (unit) => {
+  const unitInfo = await fetchUnitInfo(unit);
+  // console.log(unitInfo);
+  for (const hash in unitInfo.unitInfo) {
+    // console.log(unitInfo.unitInfo[hash]);
+    for (const key in unitInfo.unitInfo[hash]) {
+      if (key === "PortraitIcon") {
+        tempUnits = {
+          ...tempUnits,
+          [unit]: `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
+            hash
+          ][key]
+            .toLowerCase()
+            .replace("dds", "png")}`,
+        };
+      }
+    }
+  }
+  setUnitPortraits(tempUnits);
+  setUnitsLoaded(true);
 };
 
 export default itemList;
