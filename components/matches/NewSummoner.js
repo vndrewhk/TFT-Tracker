@@ -62,11 +62,11 @@ const NewSummoner = (props) => {
       );
       const data = await response.json();
 
-      console.log(data);
+      // console.log(data);
 
       setSummonerFound(true);
 
-      console.log("fetched");
+      // console.log("fetched");
       setIsLoading(false);
 
       return data.data;

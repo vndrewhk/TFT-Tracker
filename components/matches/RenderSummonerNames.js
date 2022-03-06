@@ -27,7 +27,7 @@ const RenderSummonerNames = (props) => {
     try {
       const response = await fetch(`/api/getByPUUID?puuid=${player.puuid}`);
       const userDetails = await response.json();
-      console.log(userDetails);
+      // console.log(userDetails);
       setUserList((prevState) => [
         ...prevState,
         { ...player, ...userDetails.userInfo },
@@ -106,6 +106,10 @@ const RenderSummonerNames = (props) => {
         }
       }
     }
+    tempUnits = {
+      ...tempUnits,
+      tft6_veigar: `https://raw.communitydragon.org/latest/game/assets/characters/tft6_veigar/hud/tft6_veigar_square.tft_set6.png`,
+    };
     setUnitPortraits(tempUnits);
     setUnitsLoaded(true);
   };
@@ -132,10 +136,10 @@ const RenderSummonerNames = (props) => {
   const usersList = (
     <>
       {sortedUserList.map((user) => (
-        <p key={user.puuid}>
+        <div key={user.puuid}>
           {/* summoner names of each player */}
           <li className={styles.userList}>
-            <h4>
+            <h4 key={user.name}>
               {/* we dont use #{user.tagLine} because api not provided from Riot */}
               <span>{user.placement} - </span> {user.name}
               {/* onClick -> router.push(/{region}/{user.gameName}) */}
@@ -157,7 +161,8 @@ const RenderSummonerNames = (props) => {
                     augment
                   )}`}
                 >
-                  {augment.replace("TFT6_Augment_", "").toLowerCase()}
+                  {/* {augment.replace("TFT6_Augment_", "").toLowerCase()} */}
+                  {augment}
                 </p>
                 {/* <Image
                   src={`https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/${augment
@@ -173,22 +178,37 @@ const RenderSummonerNames = (props) => {
 
           {/* traits active */}
           {/* https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/celestialblessing1.tft_set6.png */}
-          <p className={styles.traitContainer}>
+          <div className={styles.traitContainer}>
             {user.traits.map((trait) => (
-              <p key={`${trait.name}_${user.name}`}>
+              <div key={`${trait.name}_${user.name}`}>
                 {/* convert this to icons */}
                 <p className={styles.trait}>
-                  Tier {trait.tier_total} {trait.name}
-                  <p className={styles.trait_unitCount}>
+                  {/* Tier {trait.tier_total} {trait.name} */}
+                  {/* <span className={styles.trait_unitCount}>
                     {trait.num_units} Units
-                  </p>
+                  </span> */}
+                  {/* {summonerInfoState.traitData[trait.name].icon} */}
+                  {summonerInfoState.traitData[trait.name] && (
+                    // on hover of this image, show the amount of units activated
+                    //  eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      // key={unit.character_id + user.units.indexOf(unit)}
+                      src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.traitData[
+                        trait.name
+                      ].icon
+                        .toLowerCase()
+                        .replace("tex", "png")}`}
+                      alt={trait.name}
+                      className={styles.traitPortrait}
+                    />
+                  )}
                 </p>
-              </p>
+              </div>
             ))}
-          </p>
+          </div>
 
           {/* units used */}
-          <p className={styles.unitContainer}>
+          <div className={styles.unitContainer}>
             {user.units.map((unit) => (
               <div
                 className={styles.unit}
@@ -202,61 +222,60 @@ const RenderSummonerNames = (props) => {
                 {Object.keys(unitPortraits).length > 2 && (
                   // <>{unitPortraits[unit.character_id.toLowerCase()]}</>
                   <div className={styles.unitBox}>
-                    <img
-                      src={unitPortraits[unit.character_id.toLowerCase()]}
-                      alt="Logo"
-                      className={styles.unitPortrait}
-                    />
-                    <p>{unit.character_id.split("_")[1]}</p>
-                    {unit.items.map((item) => (
-                      <>
-                        {/* {item} */}
-                        {summonerInfoState.items[item] && (
-                          <img
-                            src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
-                              item
-                            ].icon
-                              .toLowerCase()
-                              .replace("dds", "png")}`}
-                            alt="Logo"
-                            className={styles.unitPortrait}
-                          />
-                        )}
-                        {/* {!itemList[item] && <span>Item ID: {item}</span>}
-                        {itemList[item] && (
-                          <img
-                            src={`https://raw.communitydragon.org/latest/game/${itemList[
-                              item
-                            ].icon
-                              .toLowerCase()
-                              .replace("dds", "png")}`}
-                            alt="Logo"
-                            className={styles.unitPortrait}
-                          /> */}
-                      </>
-                      // https://raw.communitydragon.org/latest/cdragon/tft/en_us.json
-                    ))}
+                    <>
+                      {/* {unit.character_id} */}
+                      {/*  eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        key={unit.character_id + user.units.indexOf(unit)}
+                        src={unitPortraits[unit.character_id.toLowerCase()]}
+                        alt={unit.character_id}
+                        className={styles.unitPortrait}
+                      />
+                    </>
+                    {/* could make this on hover instead */}
+                    <p className={styles.unitName}>
+                      {unit.character_id.split("_")[1]}
+                    </p>
+                    {/* if item has thieves gloves (id:99), do not iterate over the rest */}
+                    <div className={styles.itemBox}>
+                      {unit.items.map((item) => (
+                        <>
+                          {/* {item} */}
+                          {summonerInfoState.items[item] && (
+                            <>
+                              {/* {item} */}
+                              {/*  eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                key={
+                                  unit.items.indexOf(item) +
+                                  unit.character_id +
+                                  item
+                                }
+                                src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
+                                  item
+                                ].icon
+                                  .toLowerCase()
+                                  .replace("dds", "png")}`}
+                                alt="Logo"
+                                className={styles.itemPortrait}
+                              />
+                            </>
+                          )}
+                        </>
+                      ))}
+                    </div>
                   </div>
-                  // <Image
-                  //   src={unitPortraits[unit.character_id.toLowerCase()]}
-                  //   alt={unit.character_id}
-                  //   props = {unitPortraits[unit.character_id.toLowerCase()]}
-                  //   width={50}
-                  //   height={50}
-                  // ></Image>
                 )}
-
- 
               </div>
             ))}
-          </p>
+          </div>
 
           {/* time alive */}
           <span>
             <p>Time Eliminated</p>
             <p>{timeConverter(user.time_eliminated)}</p>
           </span>
-        </p>
+        </div>
       ))}
     </>
   );

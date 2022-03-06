@@ -36,7 +36,6 @@ const IndividualMatch = (props) => {
 
   const logInfo = () => {
     console.log(summonerInfoState.matchData);
-
   };
 
   useEffect(() => {
@@ -60,7 +59,10 @@ const IndividualMatch = (props) => {
       {/* <button onClick={toggleMatchData}>Toggle Match Data</button> */}
       {/* <button onClick={setSuccessButton}> set suc</button> */}
       {success && toggled && (
-        <RenderMatchData matchData={matchData}></RenderMatchData>
+        <RenderMatchData
+          key={matchData.metadata.match_id}
+          matchData={matchData}
+        ></RenderMatchData>
       )}
     </div>
   );

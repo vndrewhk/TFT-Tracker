@@ -68,7 +68,7 @@ const RenderMatchData = (props) => {
   //   setPuuids(puuidList);
   // };
 
-  console.log(matchData)
+  console.log(matchData);
   // const storePuuids = useCallback(() => {
   //   console.log("dispatch");
   //   dispatch(
@@ -79,14 +79,14 @@ const RenderMatchData = (props) => {
   // }, [dispatch, puuids]);
 
   const seePuuid = () => {
-    
     console.log(puuids);
     console.log(summonerInfoState.matchPuuids);
     console.log(matchData.info.participants);
+    console.log(matchData.metadata.match_id);
   };
 
   return (
-    <div className = {styles.matchBox}>
+    <div className={styles.matchBox}>
       {/* <h1>Match {matchData.metadata.match_id}</h1> */}
       <h2>Date: {gameDate.toString()}</h2>
       <h2>Game Length: {gameTime}</h2>
@@ -94,6 +94,7 @@ const RenderMatchData = (props) => {
       <h3>Game Type: {gameQueue}</h3>
       {
         <RenderSummonerNames
+          key={matchData.metadata.match_id+"_info"}
           participants={matchData.info.participants}
         ></RenderSummonerNames>
       }
