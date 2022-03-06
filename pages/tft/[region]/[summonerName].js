@@ -11,6 +11,7 @@ const SummonerInfoPage = () => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const { region, summonerName } = router.query;
 
+  // have to transform this into what i need
   const fetchItemInfo = useCallback(async () => {
     try {
       const response = await fetch(
@@ -30,6 +31,55 @@ const SummonerInfoPage = () => {
     }
   }, []);
 
+  // might have to abs value this when implementing, for some reason id is - and +
+  const itemList = {
+    [1]: {
+      name: "B.F. Sword",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/BF_Sword.dds",
+      index: 606,
+    },
+    [2]: {
+      name: "Recurve Bow",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Recurve_Bow.dds",
+      index: 554,
+    },
+    [3]: {
+      name: "Needlessly Large Rod",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Needlessly_Large_Rod.dds",
+      index: 618,
+    },
+    [4]: {
+      name: "Tear of the Goddess",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Tear_of_the_Goddess.dds",
+      index: 568,
+    },
+    [5]: {
+      name: "Chain Vest",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Chain_Vest.dds",
+      index: 541,
+    },
+    [6]: {
+      name: "Negatron Cloak",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Negatron_Cloak.dds",
+      index: 571,
+    },
+    [7]: {
+      name: "Giant's Belt",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Gaints_Belt.dds",
+      index: 613,
+    },
+    [8]: {
+      name: "Spatula",
+      icon: "ASSETS/Maps/Particles/TF…ns/Standard/Spatula.dds",
+      index: 597,
+    },
+    [9]: {
+      name: "Sparring Gloves",
+      icon: "ASSETS/Maps/Particles/TFT/Item_Icons/Standard/Sparring_Gloves.dds",
+      index: 579,
+    },
+  };
+
   const itemHandler = (items) => {
     dispatch(
       summonerActions.updateItems({
@@ -42,6 +92,10 @@ const SummonerInfoPage = () => {
     fetchItemInfo();
   }, []);
 
+  const logItems = () => {
+    console.log(itemList);
+    console.log(itemList[-2]);
+  };
   // probably should have a renew button that fetches all the matches
   return (
     <>
@@ -58,25 +112,11 @@ const SummonerInfoPage = () => {
           ))}
         </>
       )}
+      <button onClick={logItems}>Log items</button>
       {/* <IndividualMatch></IndividualMatch> */}
       {/* {summonerInfoState.success && <RenderMatchData></RenderMatchData>} */}
     </>
   );
 };
-
-// export async function getStaticProps() {
-//   try {
-//     const response = await fetch(
-//       "https://raw.communitydragon.org/latest/cdragon/tft/en_us.json"
-//     );
-//     if (response.ok) {
-//       const items = await response.json();
-//       return { props: { items } };
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-//   return { props: { items: "N/A" } };
-// }
 
 export default SummonerInfoPage;

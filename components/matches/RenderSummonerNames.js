@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import fetchCDragon from "../../pages/api/fetchCDragon";
+import itemList from "../assets/itemList";
 import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
@@ -210,11 +211,12 @@ const RenderSummonerNames = (props) => {
                     <p>{unit.character_id.split("_")[1]}</p>
                     {unit.items.map((item) => (
                       <>
-                        item_id:{item}
-                        {summonerInfoState.items[item] && (
+                        {/* {item} */}
+                        {!itemList[item] && <span>Item ID: {item}</span>}
+                        {itemList[item] && (
                           <img
-                            src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
-                              item+17
+                            src={`https://raw.communitydragon.org/latest/game/${itemList[
+                              item
                             ].icon
                               .toLowerCase()
                               .replace("dds", "png")}`}
@@ -265,11 +267,12 @@ const RenderSummonerNames = (props) => {
     console.log(unitPortraits);
     let item = 3;
     // console.log(unitPortraits["tft6_ekko"]);
-    console.log(
-      summonerInfoState.items.items[item].icon
-        .toLowerCase()
-        .replace("dds", "png")
-    );
+    // console.log(
+    //   summonerInfoState.items.items[item].icon
+    //     .toLowerCase()
+    //     .replace("dds", "png")
+    // );
+    console.log(summonerInfoState.items);
     console.log(Object.keys(unitPortraits).length);
     // console.log(sortedUserList)
   };
