@@ -1,7 +1,7 @@
 import { CircularProgress } from "@mui/material";
-import { style } from "@mui/system";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import fetchCDragon from "../../pages/api/fetchCDragon";
 import styles from "./RenderSummonerNames.module.css";
 const RenderSummonerNames = (props) => {
@@ -13,6 +13,7 @@ const RenderSummonerNames = (props) => {
   const [unitPortraits, setUnitPortraits] = useState([]);
   const [unitsFetched, setUnitsFetched] = useState(false);
 
+  const summonerInfoState = useSelector((state) => state.summonerInfo);
   // when sortedUserList length === 8, trigger fn
   // fn will fetch all units from the game and store in object key value pair, {tft6_ahri:ASSETS/Characters/TFT6_Ahri/HUD/TFT6_Ahri.TFT_Set6_Stage2.dds}
   // then will use this data in a state to render in site
@@ -94,20 +95,6 @@ const RenderSummonerNames = (props) => {
       // console.log(unitInfo.unitInfo[hash]);
       for (const key in unitInfo.unitInfo[hash]) {
         if (key === "PortraitIcon") {
-          // let unitName;
-          // unitName = unit;
-
-          // let unitUrl;
-          // // unitObj["unit"] = unit;
-          // unitUrl = `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
-          //   hash
-          // ][key]
-          //   .toLowerCase()
-          //   .replace("dds", "png")}`;
-          // // console.log(tempUnits.indexOf(unitObj));
-
-          // const unitObj = { unit, unitUrl };
-
           tempUnits = {
             ...tempUnits,
             [unit]: `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
@@ -119,11 +106,16 @@ const RenderSummonerNames = (props) => {
         }
       }
     }
-    // console.log(tempUnits);
-
     setUnitPortraits(tempUnits);
     setUnitsLoaded(true);
   };
+
+  // i only need to fetch once in this case
+
+  // let tempItems = {};
+  // const itemHandler = async (item_id)=>{
+  //   const itemInfo = await fetchItemInfo(item_id)
+  // }
 
   if (sortedUserList.length === 8 && !unitsFetched) {
     console.log(sortedUserList[0].units);
@@ -216,6 +208,23 @@ const RenderSummonerNames = (props) => {
                       className={styles.unitPortrait}
                     />
                     <p>{unit.character_id.split("_")[1]}</p>
+                    {unit.items.map((item) => (
+                      <>
+                        item_id:{item}
+                        {summonerInfoState.items[item] && (
+                          <img
+                            src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
+                              item+17
+                            ].icon
+                              .toLowerCase()
+                              .replace("dds", "png")}`}
+                            alt="Logo"
+                            className={styles.unitPortrait}
+                          />
+                        )}
+                      </>
+                      // https://raw.communitydragon.org/latest/cdragon/tft/en_us.json
+                    ))}
                   </div>
                   // <Image
                   //   src={unitPortraits[unit.character_id.toLowerCase()]}
@@ -254,7 +263,13 @@ const RenderSummonerNames = (props) => {
     console.log(userList.length);
     console.log(sortedUserList);
     console.log(unitPortraits);
+    let item = 3;
     // console.log(unitPortraits["tft6_ekko"]);
+    console.log(
+      summonerInfoState.items.items[item].icon
+        .toLowerCase()
+        .replace("dds", "png")
+    );
     console.log(Object.keys(unitPortraits).length);
     // console.log(sortedUserList)
   };

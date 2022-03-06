@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderMatchData from "./RenderMatchData";
-import styles from "./IndividualMatch.module.css"
+import styles from "./IndividualMatch.module.css";
 
 const IndividualMatch = (props) => {
   const [matchData, setMatchData] = useState(); //1
@@ -36,9 +36,8 @@ const IndividualMatch = (props) => {
 
   const logInfo = () => {
     console.log(summonerInfoState.matchData);
+
   };
-
-
 
   useEffect(() => {
     fetchMatchInfo();
@@ -47,15 +46,15 @@ const IndividualMatch = (props) => {
     }
   }, []);
 
-
   const toggleMatchData = () => {
     setToggled(!toggled);
   };
 
   return (
-    <div className = {styles.matchContainer}>
+    <div className={styles.matchContainer}>
       {matchIsLoading && <div>Loading Match Details</div>}
       <h1 onClick={toggleMatchData}>Match {matchId}</h1>
+      {/* <button onClick={logInfo}>log match details</button> */}
       {/* <button onClick={fetchMatchInfo}>fetch match details</button>
       <button onClick={logInfo}>log match details</button> */}
       {/* <button onClick={toggleMatchData}>Toggle Match Data</button> */}

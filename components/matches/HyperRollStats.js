@@ -3,7 +3,7 @@ const HyperRollStats = (props) => {
     <>
    
       <div>
-        <h2>Rank Type: {props.matchInfo.queueType}</h2>
+        <h2>Hyper Roll</h2>
         <p>LP: {props.matchInfo.ratedRating}</p>
         <p> Wins: {props.matchInfo.wins} Losses: {props.matchInfo.losses}</p>
       </div>

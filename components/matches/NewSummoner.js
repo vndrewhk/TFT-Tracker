@@ -182,39 +182,43 @@ const NewSummoner = (props) => {
   }, [matchIds]);
 
   return (
-    <div className={styles.summonerInfoBox}>
-      <div className={styles.pageButton}>
-        <Button variant="contained" onClick={overviewButtonHandler}>
-          overview
-        </Button>
+    <>
+      <div className={styles.summonerInfoBox}>
+        {isLoading && <h1>Loading...</h1>}
 
-        <Button variant="contained" onClick={fetchMatchDetails}>
-          matches
-        </Button>
+        <div className={styles.summonerInfo}>
+          <h1 className={styles.summonerName}>{summonerName}</h1>
+          <div className={styles.pageButton}>
+            <Button variant="contained" onClick={fetchMatchDetails}>
+              matches
+            </Button>
+          </div>
+          {/*  ICON:{summonerInfoState.summonerInfo.profileIconId} */}
+          <div className={styles.statsBox}>
+            {success && rankedTFTInfo && rankedTftVisible && (
+              <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
+            )}
+            {success && rankedTFTInfo && rankedTftVisible && (
+              <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
+            )}
+            {success && hyperRollInfo && hyperRollVisible && (
+              <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
+            )}
+          </div>
+          {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
+            <h1>Summoner not found! Did you select the correct region?</h1>
+          )}
+
+          {success && !rankedTFTInfo && !hyperRollInfo && (
+            <h1>No Ranked Info Found for {summonerName}!</h1>
+          )}
+        </div>
       </div>
-
-      {isLoading && <h1>Loading...</h1>}
-
-      <div className={styles.summonerInfo}>
-        <h1>{summonerName}</h1>
-        {/*  ICON:{summonerInfoState.summonerInfo.profileIconId} */}
-        {success && rankedTFTInfo && rankedTftVisible && (
-          <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
-        )}
-
-        {success && hyperRollInfo && hyperRollVisible && (
-          <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
-        )}
-
-        {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
-          <h1>Summoner not found! Did you select the correct region?</h1>
-        )}
+      <div className={styles.matchesLoading}>
         {matchesLoading && <CircularProgress></CircularProgress>}
-        {success && !rankedTFTInfo && !hyperRollInfo && (
-          <h1>No Ranked Info Found for {summonerName}!</h1>
-        )}
+        <h2>Match History</h2>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -11,6 +11,7 @@ const initialSummonerState = {
   routerRegion: "",
   isLoading: false,
   success: false,
+  items: {},
 };
 
 const summonerInfoSlice = createSlice({
@@ -41,6 +42,9 @@ const summonerInfoSlice = createSlice({
     },
     replaceRequestPuuid(state, action) {
       state.requestPuuid = action.payload.requestPuuid;
+    },
+    updateItems(state, action) {
+      state.items = action.payload.items;
     },
   },
 });
