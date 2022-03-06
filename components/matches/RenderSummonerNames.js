@@ -210,7 +210,7 @@ const RenderSummonerNames = (props) => {
                     <p>{unit.character_id.split("_")[1]}</p>
                     {unit.items.map((item) => (
                       <>
-                        {item}
+                        {/* {item} */}
                         {summonerInfoState.items[item] && (
                           <img
                             src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
@@ -246,13 +246,7 @@ const RenderSummonerNames = (props) => {
                   // ></Image>
                 )}
 
-                {/* {unitImageHandler(unit.character_id.toLowerCase())} */}
-                {/* <Image
-                  src={`https://raw.communitydragon.org/latest/game/assets/characters/${unit.character_id.toLowerCase()}/hud/${unit.character_id.toLowerCase()}.tft_set6_stage2.png`}
-                  alt={unit.character_id}
-                  width={50}
-                  height={50}
-                ></Image> */}
+ 
               </div>
             ))}
           </p>
