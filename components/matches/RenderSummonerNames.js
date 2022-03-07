@@ -148,7 +148,7 @@ const RenderSummonerNames = (props) => {
           </li>
 
           {/* general info */}
-          {/* GOLD, LAST ROUND, TOTAL DAMAGE */} 
+          {/* GOLD, LAST ROUND, TOTAL DAMAGE */}
           <div className={styles["general-info"]}>
             <span className={styles["last-round"]}>
               Round: {user.last_round}
@@ -162,19 +162,20 @@ const RenderSummonerNames = (props) => {
             {/* <span>{user.total_damage_to_players} Damage Dealt</span> */}
           </div>
           {/* augments used in game */}
-          <p className={styles.augmentContainer}>
-            {user.augments.map((augment) => (
-              <>
-                <p
-                  className={styles.augment}
-                  key={`${augment}_${user.name}_${user.augments.indexOf(
-                    augment
-                  )}`}
-                >
-                  {/* {augment.replace("TFT6_Augment_", "").toLowerCase()} */}
-                  {augment}
-                </p>
-                {/* <Image
+          {user.augments && (
+            <p className={styles.augmentContainer}>
+              {user.augments.map((augment) => (
+                <>
+                  <p
+                    className={styles.augment}
+                    key={`${augment}_${user.name}_${user.augments.indexOf(
+                      augment
+                    )}`}
+                  >
+                    {/* {augment.replace("TFT6_Augment_", "").toLowerCase()} */}
+                    {augment}
+                  </p>
+                  {/* <Image
                   src={`https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/${augment
                     .replace("TFT6_Augment_", "")
                     .toLowerCase()}.tft_set6.png`}
@@ -182,9 +183,10 @@ const RenderSummonerNames = (props) => {
                   width={100}
                   height={100}
                 ></Image> */}
-              </>
-            ))}
-          </p>
+                </>
+              ))}
+            </p>
+          )}
 
           {/* traits active */}
           {/* https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/celestialblessing1.tft_set6.png */}
@@ -236,16 +238,20 @@ const RenderSummonerNames = (props) => {
                       {/* {unit.character_id} */}
 
                       {/*  eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        key={unit.character_id + user.units.indexOf(unit)}
-                        src={unitPortraits[unit.character_id.toLowerCase()]}
-                        alt={unit.character_id}
-                        // summonerInfoState.championData[unit.character_id].cost
-                        className={`${styles.unitPortrait} ${
-                          "champion-cost-" +
-                          summonerInfoState.championData[unit.character_id].cost
-                        }`}
-                      />
+                      {unitPortraits[unit.character_id.toLowerCase()] && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={unit.character_id + user.units.indexOf(unit)}
+                          src={unitPortraits[unit.character_id.toLowerCase()]}
+                          alt={unit.character_id}
+                          // summonerInfoState.championData[unit.character_id].cost
+                          className={`${styles.unitPortrait} ${
+                            "champion-cost-" +
+                            summonerInfoState.championData[unit.character_id]
+                              .cost
+                          }`}
+                        />
+                      )}
                     </>
                     {/* could make this on hover instead */}
                     <p className={styles.unitName}>

@@ -213,9 +213,9 @@ const NewSummoner = (props) => {
             {success && rankedTFTInfo && rankedTftVisible && (
               <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
             )}
-            {success && rankedTFTInfo && rankedTftVisible && (
+            {/* {success && rankedTFTInfo && rankedTftVisible && (
               <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
-            )}
+            )} */}
             {success && hyperRollInfo && hyperRollVisible && (
               <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
             )}
