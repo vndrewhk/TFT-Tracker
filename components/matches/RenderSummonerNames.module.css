@@ -71,6 +71,7 @@
   flex-direction: column;
   margin: 0px;
   padding: 0px;
+  
   align-items: center;
 }
 
@@ -102,3 +103,8 @@
 /* .unitPortrait{
   font-size: px;
 } */
+
+
+.cost_2{
+border:5px green solid;
+}

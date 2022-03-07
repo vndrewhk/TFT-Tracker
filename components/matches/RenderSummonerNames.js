@@ -224,12 +224,17 @@ const RenderSummonerNames = (props) => {
                   <div className={styles.unitBox}>
                     <>
                       {/* {unit.character_id} */}
+
                       {/*  eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         key={unit.character_id + user.units.indexOf(unit)}
                         src={unitPortraits[unit.character_id.toLowerCase()]}
                         alt={unit.character_id}
-                        className={styles.unitPortrait}
+                        // summonerInfoState.championData[unit.character_id].cost
+                        className={`${styles.unitPortrait} ${
+                          "champion-cost-" +
+                          summonerInfoState.championData[unit.character_id].cost
+                        }`}
                       />
                     </>
                     {/* could make this on hover instead */}

@@ -84,8 +84,9 @@ const SummonerInfoPage = () => {
   }, []);
 
   const logItems = () => {
-    console.log(itemList);
-    console.log(itemList[-2]);
+    console.log(summonerInfoState.items);
+    console.log(summonerInfoState.championData);
+    console.log(summonerInfoState.traitData);
   };
   // probably should have a renew button that fetches all the matches
   return (
