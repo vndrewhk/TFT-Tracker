@@ -5,11 +5,14 @@ import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderMatchData from "./RenderMatchData";
 import styles from "./IndividualMatch.module.css";
 
+// should show a mini version instead
+// render summoner names but just the small version (names/icons/ur units only)
 const IndividualMatch = (props) => {
   const [matchData, setMatchData] = useState(); //1
   const [matchIsLoading, setMatchIsLoading] = useState(false); //2
   const [success, setSuccess] = useState(false); //3
   const [toggled, setToggled] = useState(false);
+  const [miniMatch, setMiniMatch] = useState(true);
   // const matchId = "NA1_4216069806";
   const matchId = props.matchId;
 
@@ -26,6 +29,7 @@ const IndividualMatch = (props) => {
       if (!success) {
         setSuccess(true);
       }
+      // setToggled(true);
       setMatchIsLoading(false);
     } catch (err) {
       setSuccess(false);
@@ -45,6 +49,12 @@ const IndividualMatch = (props) => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (success) {
+  //     setToggled(true);
+  //   }
+  // }, [success]);
+
   const toggleMatchData = () => {
     setToggled(!toggled);
   };
@@ -59,6 +69,12 @@ const IndividualMatch = (props) => {
       {/* <button onClick={toggleMatchData}>Toggle Match Data</button> */}
       {/* <button onClick={setSuccessButton}> set suc</button> */}
       {success && toggled && (
+        <RenderMatchData
+          key={matchData.metadata.match_id}
+          matchData={matchData}
+        ></RenderMatchData>
+      )}
+      {success && toggled && !miniMatch && (
         <RenderMatchData
           key={matchData.metadata.match_id}
           matchData={matchData}

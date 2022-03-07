@@ -104,7 +104,7 @@ const SummonerInfoPage = () => {
           ))}
         </>
       )}
-      <button onClick={logItems}>Log items</button>
+      {/* <button onClick={logItems}>Log items</button> */}
       {/* <IndividualMatch></IndividualMatch> */}
       {/* {summonerInfoState.success && <RenderMatchData></RenderMatchData>} */}
     </>

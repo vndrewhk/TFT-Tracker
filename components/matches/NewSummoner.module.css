@@ -1,5 +1,5 @@
 .summonerInfoBox {
-  border: 2px red solid;
+  /* border: 2px red solid; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,25 +10,35 @@
   padding-right: 35rem;
   padding-top: 0px;
   margin-top: 0px;
+  display: flex;
+  flex-direction: column;
 }
-.summonerInfo .summonerName {
+.summonerInfo .summonerNameContainer {
   padding-top: 0px;
   margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.summonerName {
+  margin-left: 5px;
 }
 
 .matchHistory {
   margin-right: 39rem;
 }
 
-/* .pageButton {
+.pageButton {
   flex-direction: row;
   display: flex;
-  margin-right: 46rem;
-} */
+  /* margin-left: 5px; */
+}
 
 .statsBox {
   display: flex;
-  background-color: bisque;
+  /* background-color: #c5d1ec; */
   flex-direction: row;
 }
 

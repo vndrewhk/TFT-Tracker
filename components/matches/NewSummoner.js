@@ -8,6 +8,7 @@ import HyperRollStats from "./HyperRollStats";
 import RankedStats from "./RankedStats";
 
 import styles from "./NewSummoner.module.css";
+import Image from "next/image";
 
 const NewSummoner = (props) => {
   const router = useRouter();
@@ -187,13 +188,27 @@ const NewSummoner = (props) => {
         {isLoading && <h1>Loading...</h1>}
 
         <div className={styles.summonerInfo}>
-          <h1 className={styles.summonerName}>{summonerName}</h1>
-          <div className={styles.pageButton}>
-            <Button variant="contained" onClick={fetchMatchDetails}>
-              matches
-            </Button>
+          <div className={styles.summonerNameContainer}>
+            <Image
+              src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summonerInfoState.summonerInfo.profileIconId}.jpg`}
+              width={100}
+              height={100}
+              alt={"Summoner Icon"}
+            ></Image>
+            <div>
+              <h1 className={styles.summonerName}>
+                {summonerName}
+                <div className={styles.pageButton}>
+                  <Button variant="contained" onClick={fetchMatchDetails}>
+                    matches
+                  </Button>
+                </div>
+              </h1>
+            </div>
           </div>
-          {/*  ICON:{summonerInfoState.summonerInfo.profileIconId} */}
+
+          {/* https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summonerInfoState.summonerInfo.profileIconId}.jpg */}
+
           <div className={styles.statsBox}>
             {success && rankedTFTInfo && rankedTftVisible && (
               <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
@@ -208,7 +223,6 @@ const NewSummoner = (props) => {
           {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
             <h1>Summoner not found! Did you select the correct region?</h1>
           )}
-
           {success && !rankedTFTInfo && !hyperRollInfo && (
             <h1>No Ranked Info Found for {summonerName}!</h1>
           )}

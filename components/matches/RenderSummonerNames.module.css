@@ -3,6 +3,11 @@
   padding-left: 2%;
 }
 
+.username {
+  padding: 0%;
+  margin: 5px;
+}
+
 .augmentContainer {
   border: 1px solid black;
   display: flex;
@@ -71,7 +76,7 @@
   flex-direction: column;
   margin: 0px;
   padding: 0px;
-  
+
   align-items: center;
 }
 
@@ -103,8 +108,16 @@
 /* .unitPortrait{
   font-size: px;
 } */
+.general-info {
+  max-width: 20%;
+  display: flex;
+  justify-content: space-between;
+}
+.last-round {
+  padding-right: 5px;
+}
 
-
-.cost_2{
-border:5px green solid;
+.gold-remaining {
+  font-size: large;
+  font-weight: bold;
 }

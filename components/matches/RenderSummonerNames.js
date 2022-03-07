@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import fetchCDragon from "../../pages/api/fetchCDragon";
 import styles from "./RenderSummonerNames.module.css";
+import goldIcon from "../assets/icons/ico-gold.png";
 const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
   const [userList, setUserList] = useState([]);
@@ -139,7 +140,7 @@ const RenderSummonerNames = (props) => {
         <div key={user.puuid}>
           {/* summoner names of each player */}
           <li className={styles.userList}>
-            <h4 key={user.name}>
+            <h4 className={styles["username"]} key={user.name}>
               {/* we dont use #{user.tagLine} because api not provided from Riot */}
               <span>{user.placement} - </span> {user.name}
               {/* onClick -> router.push(/{region}/{user.gameName}) */}
@@ -147,10 +148,19 @@ const RenderSummonerNames = (props) => {
           </li>
 
           {/* general info */}
-          <p>Round: {user.last_round}</p>
-          <span>{user.gold_left} GOLD Remaining, </span>
-          <span>{user.total_damage_to_players} Damage Dealt</span>
-
+          {/* GOLD, LAST ROUND, TOTAL DAMAGE */} 
+          <div className={styles["general-info"]}>
+            <span className={styles["last-round"]}>
+              Round: {user.last_round}
+            </span>
+            <span className={styles["gold-remaining"]}>
+              {user.gold_left}
+              <Image src={goldIcon} alt="Gold Icon"></Image>
+            </span>
+            {/* time alive */}
+            <span>Alive: {timeConverter(user.time_eliminated)}</span>
+            {/* <span>{user.total_damage_to_players} Damage Dealt</span> */}
+          </div>
           {/* augments used in game */}
           <p className={styles.augmentContainer}>
             {user.augments.map((augment) => (
@@ -274,12 +284,6 @@ const RenderSummonerNames = (props) => {
               </div>
             ))}
           </div>
-
-          {/* time alive */}
-          <span>
-            <p>Time Eliminated</p>
-            <p>{timeConverter(user.time_eliminated)}</p>
-          </span>
         </div>
       ))}
     </>
