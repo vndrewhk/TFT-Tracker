@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import RenderMiniSummoner from "./RenderMiniSummoner";
-import RenderSummonerNames from "./RenderSummonerNames";
+import styles from "./RenderMiniMatch.module.css";
 const RenderMiniMatch = (props) => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const matchData = props.matchData;
@@ -63,19 +63,19 @@ const RenderMiniMatch = (props) => {
 
   return (
     <div>
-      <p>Date: {gameDate.toString()}</p>
-      <p>Game Length: {gameTime}</p>
-      <p>Placed: {participantInfo[0].placement}</p>
-      <p>Game Type: {gameQueue}</p>
+      <div className={styles["info-box"]}>
+        {/* <p className={styles["general-info"]}>Date: {gameDate.toString()}</p> */}
+        <p className={styles["general-info"]}>
+          Placed: <b>{participantInfo[0].placement}</b>
+        </p>
+
+        <b className={styles["general-info"]}>{gameQueue}</b>
+        <p className={styles["general-info"]}>{gameTime}</p>
+      </div>
       <RenderMiniSummoner
         key={matchData.metadata.match_id + "_mini"}
         participants={matchData.info.participants}
       ></RenderMiniSummoner>
-      {/* <RenderSummonerNames
-        viewType={"mini"}
-        key={matchData.metadata.match_id + "_mini"}
-        participants={matchData.info.participants}
-      ></RenderSummonerNames> */}
     </div>
   );
 };

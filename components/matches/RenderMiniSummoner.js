@@ -126,13 +126,23 @@ const RenderMiniSummoner = (props) => {
     setUnitsFetched(true);
   }
 
+  const userNames = (
+    <div className={styles["mini-user-list"]}>
+      {sortedUserList.map((user) => (
+        <div key={`${user.puuid}_mininame`}>
+          <p className={styles["mini-user"]}>{user.name}</p>
+        </div>
+      ))}
+    </div>
+  );
+
   const miniUser = (
     <>
       {userList
         .filter((user) => user.puuid === summonerInfoState.summonerInfo.puuid)
         .map((user) => (
           <div key={`${user.puuid}_mini`}>
-            <p>{user.name}</p>
+            {/* <p>{user.name}</p> */}
             <div className={styles.unitContainer}>
               {user.units.map((unit) => (
                 <div
@@ -141,7 +151,6 @@ const RenderMiniSummoner = (props) => {
                     unit
                   )}`}
                 >
-
                   {/* return unitUrl of the object that matches unit:unit */}
                   {!unitsLoaded && <CircularProgress></CircularProgress>}
                   {Object.keys(unitPortraits).length > 2 && (
@@ -217,10 +226,10 @@ const RenderMiniSummoner = (props) => {
   };
 
   return (
-    <>
-      {/* PLACEHOLDER SUMMONER */}
+    <div className={styles["mini-match-preview"]}>
+      {userNames}
       {miniUser} <button onClick={logInfo}>XX</button>
-    </>
+    </div>
   );
 };
 

@@ -1,3 +1,7 @@
+.mini-match-preview {
+  display: flex;
+}
+
 .unitContainer {
   display: flex;
   flex-direction: row;
@@ -21,4 +25,22 @@
 .itemPortrait {
   width: 15px;
   height: 15px;
+}
+
+.mini-user-list {
+  align-items: flex-end;
+  justify-content: flex-end;
+  display: inline;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  /* max-height: 64px; */
+  flex-wrap: wrap;
+}
+
+.mini-user {
+  margin: 0%;
+  padding: 0;
+  padding-left: 5px;
+  font-size: 14px;
 }

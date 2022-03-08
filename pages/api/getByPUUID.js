@@ -1,11 +1,10 @@
 import API_KEY from "./API_key";
 
-const getByPUUID = async (req, res) => {
-  let URL =
-    "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/";
+const getByPUUID = async (req, res, retryCount = 0) => {
+  let URL = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/";
   // probably switch to this
   // "https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/";
-
+  const maxRetries = 5;
   let puuid = req.query.puuid;
   let requestURL = `${URL}${puuid}`;
   try {
@@ -29,6 +28,9 @@ const getByPUUID = async (req, res) => {
       //return matchInfo doesnt do anything
     }
   } catch (err) {
+    if (retryCount < maxRetries) {
+      return getByPUUID(retryCount + 1);
+    }
     res.status(200).json({ message: "err" });
     console.log(err);
     return err;
