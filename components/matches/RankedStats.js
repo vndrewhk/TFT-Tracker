@@ -23,10 +23,17 @@ const RankedStats = (props) => {
         <div className={styles["win-loss"]}>
           <div>
             <b>Wins</b>: {props.matchInfo.wins}
-          </div>{" "}
+          </div>
           <div>
             <b>Losses</b>:{props.matchInfo.losses}
           </div>
+        </div>
+        <div>
+          <b>WR</b>:
+          {(props.matchInfo.wins /
+            (props.matchInfo.losses + props.matchInfo.wins)) *
+            100}
+          %
         </div>
       </div>
     </>

@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import RenderMiniSummoner from "./RenderMiniSummoner";
 import RenderSummonerNames from "./RenderSummonerNames";
-import styles from "./RenderMatchData.module.css";
-
-const RenderMatchData = (props) => {
+const RenderMiniMatch = (props) => {
   const summonerInfoState = useSelector((state) => state.summonerInfo);
   const matchData = props.matchData;
 
@@ -44,7 +43,6 @@ const RenderMatchData = (props) => {
     const gameQueue = queueConverter(matchData.info);
 
     const puuidGrabber = (matchData) => {
-      // its because THIS IS BEING IPDATED LIKER 2913084281903 TIMES MAN FK
       let puuidLists = matchData.info.participants.map(
         (summoner) => summoner.puuid
       );
@@ -62,48 +60,24 @@ const RenderMatchData = (props) => {
 
   const { gameTime, gameDate, gameQueue, puuidList, participantInfo } =
     convertData(matchData);
-  console.log("rendering");
 
-  // const puuidListUpdate = () => {
-  //   setPuuids(puuidList);
-  // };
-
-  console.log(matchData);
-  // const storePuuids = useCallback(() => {
-  //   console.log("dispatch");
-  //   dispatch(
-  //     summonerActions.updatePuuids({
-  //       matchPuuids: puuids,
-  //     })
-  //   );
-  // }, [dispatch, puuids]);
-
-  const seePuuid = () => {
-    console.log(puuids);
-    console.log(summonerInfoState.matchPuuids);
-    console.log(matchData.info.participants);
-    console.log(matchData.metadata.match_id);
-  };
-
-  const renderedMatch = (
-    <div className={styles.matchBox}>
-      {/* <h1>Match {matchData.metadata.match_id}</h1> */}
-      {/* <p>Date: {gameDate.toString()}</p>
+  return (
+    <div>
+      <p>Date: {gameDate.toString()}</p>
       <p>Game Length: {gameTime}</p>
       <p>Placed: {participantInfo[0].placement}</p>
-      <p>Game Type: {gameQueue}</p> */}
-      {
-        <RenderSummonerNames
-          key={matchData.metadata.match_id + "_info"}
-          participants={matchData.info.participants}
-        ></RenderSummonerNames>
-      }
-      {/* <button onClick={seePuuid}>see puuids</button> */}
-      {/* <button onClick={puuidListUpdate}> puuid update</button> */}
-      {/* <button onClick={storePuuids}> Manually store puuid</button> */}
+      <p>Game Type: {gameQueue}</p>
+      <RenderMiniSummoner
+        key={matchData.metadata.match_id + "_mini"}
+        participants={matchData.info.participants}
+      ></RenderMiniSummoner>
+      {/* <RenderSummonerNames
+        viewType={"mini"}
+        key={matchData.metadata.match_id + "_mini"}
+        participants={matchData.info.participants}
+      ></RenderSummonerNames> */}
     </div>
   );
-
-  return <>{renderedMatch}</>;
 };
-export default RenderMatchData;
+
+export default RenderMiniMatch;

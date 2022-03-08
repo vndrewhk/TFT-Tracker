@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import RenderMatchData from "./RenderMatchData";
 import styles from "./IndividualMatch.module.css";
+import { CircularProgress } from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import RenderMiniMatch from "./RenderMiniMatch";
 
 // should show a mini version instead
 // render summoner names but just the small version (names/icons/ur units only)
@@ -13,6 +16,7 @@ const IndividualMatch = (props) => {
   const [success, setSuccess] = useState(false); //3
   const [toggled, setToggled] = useState(false);
   const [miniMatch, setMiniMatch] = useState(true);
+
   // const matchId = "NA1_4216069806";
   const matchId = props.matchId;
 
@@ -61,25 +65,35 @@ const IndividualMatch = (props) => {
 
   return (
     <div className={styles.matchContainer}>
-      {matchIsLoading && <div>Loading Match Details</div>}
-      <h1 onClick={toggleMatchData}>Match {matchId}</h1>
+      <div className={styles.matchInfo}>
+        {matchIsLoading && <CircularProgress></CircularProgress>}
+        {/* turn this component into the mini match overview */}
+        {/* <h1 onClick={toggleMatchData}>Match {matchId}</h1> */}
+        {success && !matchIsLoading && matchData && (
+          <RenderMiniMatch
+            matchData={matchData}
+            key={`${matchData.metadata.match_id}_mini`}
+          ></RenderMiniMatch>
+        )}
+        {success && toggled && matchData && (
+          <RenderMatchData
+            key={matchData.metadata.match_id}
+            matchData={matchData}
+          ></RenderMatchData>
+        )}
+      </div>
+      <div className={styles["toggle-detail"]} onClick={toggleMatchData}>
+        {toggled ? (
+          <KeyboardArrowUp></KeyboardArrowUp>
+        ) : (
+          <KeyboardArrowDown></KeyboardArrowDown>
+        )}
+      </div>
       {/* <button onClick={logInfo}>log match details</button> */}
       {/* <button onClick={fetchMatchInfo}>fetch match details</button>
       <button onClick={logInfo}>log match details</button> */}
       {/* <button onClick={toggleMatchData}>Toggle Match Data</button> */}
       {/* <button onClick={setSuccessButton}> set suc</button> */}
-      {success && toggled && (
-        <RenderMatchData
-          key={matchData.metadata.match_id}
-          matchData={matchData}
-        ></RenderMatchData>
-      )}
-      {success && toggled && !miniMatch && (
-        <RenderMatchData
-          key={matchData.metadata.match_id}
-          matchData={matchData}
-        ></RenderMatchData>
-      )}
     </div>
   );
 };
