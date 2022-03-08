@@ -3,6 +3,8 @@ import styles from "./RankedStats.module.css";
 import RANKED_ICONS from "../assets/icons/Rank Icons/tft_ranked_icons";
 
 const RankedStats = (props) => {
+  console.log("tft_" + props.matchInfo.tier.toLowerCase());
+  console.log(RANKED_ICONS["tft_" + props.matchInfo.tier.toLowerCase()]);
   return (
     <>
       <div className={styles["ranked-container"]}>

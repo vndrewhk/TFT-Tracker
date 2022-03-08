@@ -15,6 +15,11 @@ const getByPUUID = async (req, res, retryCount = 0) => {
     });
 
     if (!responseData.ok) {
+      if (retryCount < maxRetries) {
+        setTimeout(() => {
+          return getByPUUID(retryCount + 1);
+        }, 1000);
+      }
       res.status(201).json({ message: "!ok" });
       throw new Error("Something went wrong!");
     }
