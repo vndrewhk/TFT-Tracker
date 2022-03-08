@@ -1,5 +1,6 @@
 .mini-match-preview {
   display: flex;
+  justify-content: space-between;
 }
 
 .unitContainer {
@@ -32,15 +33,19 @@
   justify-content: flex-end;
   display: inline;
   flex-direction: column;
-  width: 100%;
+  width: 30%;
   padding: 0;
-  /* max-height: 64px; */
+  column-count: 2;
   flex-wrap: wrap;
 }
 
+.mini-user-column {
+  margin: 0%;
+  padding: 0%;
+}
 .mini-user {
   margin: 0%;
   padding: 0;
-  padding-left: 5px;
+  /* padding-left: 5px; */
   font-size: 14px;
 }

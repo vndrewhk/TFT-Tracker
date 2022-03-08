@@ -126,13 +126,20 @@ const RenderMiniSummoner = (props) => {
     setUnitsFetched(true);
   }
 
+  //   const userNames_1={sortedUserList}
+
   const userNames = (
     <div className={styles["mini-user-list"]}>
-      {sortedUserList.map((user) => (
-        <div key={`${user.puuid}_mininame`}>
-          <p className={styles["mini-user"]}>{user.name}</p>
-        </div>
-      ))}
+      <div className={styles["mini-user-column"]}>
+        {sortedUserList.map((user) => (
+          //   <div key={`${user.puuid}_mininame`}>
+          <p key={`${user.puuid}_mininame`} className={styles["mini-user"]}>
+            <b>{user.placement} - </b>
+            {user.name}
+          </p>
+          //   </div>
+        ))}
+      </div>
     </div>
   );
 
@@ -227,8 +234,8 @@ const RenderMiniSummoner = (props) => {
 
   return (
     <div className={styles["mini-match-preview"]}>
+      <>{miniUser}</>
       {userNames}
-      {miniUser} <button onClick={logInfo}>XX</button>
     </div>
   );
 };

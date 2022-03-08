@@ -29,7 +29,9 @@ const getByPUUID = async (req, res, retryCount = 0) => {
     }
   } catch (err) {
     if (retryCount < maxRetries) {
-      return getByPUUID(retryCount + 1);
+      setTimeout(() => {
+        return getByPUUID(retryCount + 1);
+      }, 1000);
     }
     res.status(200).json({ message: "err" });
     console.log(err);
