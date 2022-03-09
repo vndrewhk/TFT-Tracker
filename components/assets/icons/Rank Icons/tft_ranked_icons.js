@@ -3,7 +3,7 @@ const RANKED_ICONS = {
   tft_bronze: require("./tft_regalia_bronze.png").default,
   tft_silver: require("./tft_regalia_silver.png").default,
   tft_gold: require("./tft_regalia_gold.png").default,
-  tft_platinum: require("./tft_regalia_platinum.png").default,
+  tft_platinum: require("./tft_regalia_platinum.png"),
   tft_diamond: require("./tft_regalia_diamond.png").default,
   tft_master: require("./tft_regalia_master.png").default,
   tft_grandmaster: require("./tft_regalia_grandmaster.png").default,

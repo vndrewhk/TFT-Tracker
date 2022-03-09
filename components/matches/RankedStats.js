@@ -10,6 +10,12 @@ const RankedStats = (props) => {
       <div className={styles["ranked-container"]}>
         <h2>Ranked</h2>
         <div className={styles["ranked-tier"]}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* <img
+            src={RANKED_ICONS["tft_" + props.matchInfo.tier.toLowerCase()]}
+            alt={"ranked icon"}
+            className={styles["ranked-icon"]}
+          ></img> */}
           <Image
             src={RANKED_ICONS["tft_" + props.matchInfo.tier.toLowerCase()]}
             width={100}
@@ -32,9 +38,11 @@ const RankedStats = (props) => {
         </div>
         <div>
           <b>WR</b>:
-          {(props.matchInfo.wins /
-            (props.matchInfo.losses + props.matchInfo.wins)) *
-            100}
+          {Math.floor(
+            (props.matchInfo.wins /
+              (props.matchInfo.losses + props.matchInfo.wins)) *
+              10000
+          ) / 100}
           %
         </div>
       </div>
