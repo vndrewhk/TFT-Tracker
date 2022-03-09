@@ -1,19 +1,20 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { summonerActions } from "../../apps/store/summonerInfoSlice";
 import HyperRollStats from "./HyperRollStats";
 import RankedStats from "./RankedStats";
 
+import styles from "./NewSummoner.module.css";
+import Image from "next/image";
+
 const NewSummoner = (props) => {
-  // overwhelming amount of state, a reducer would be better now.
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const summonerInfoState = useSelector((state) => state.summonerInfo);
   const [hasLoaded, setHasLoaded] = useState("false");
   const [summonerName, setSummonerName] = useState("");
   const [summonerInfo, setSummonerInfo] = useState("");
@@ -23,18 +24,29 @@ const NewSummoner = (props) => {
   const [region, setRegion] = useState("NA1");
   const [rankedTFTInfo, setRankedTFTInfo] = useState(null);
   const [hyperRollInfo, setHyperRollInfo] = useState(null);
-  const [summonerFound, setSummonerFound] = useState(false);
+  const [summonerFound, setSummonerFound] = useState(true);
+  const [matchIds, setMatchIds] = useState([]);
+  const [matchesLoading, setMatchesLoading] = useState(false);
 
-  const summonerInfoState = useSelector((state) => state.summonerInfo);
+  const [rankedTftVisible, setRankedTftVisible] = useState(true);
+  const [hyperRollVisible, setHyperRollVisible] = useState(true);
 
-  const summonerRef = useRef();
+  const [matchToggle, setMatchToggle] = useState(false);
 
-  const summonerBlurHandler = () => {
-    setSummonerName(summonerRef.current.value);
+  const summonerStateHandler = () => {
+    dispatch(
+      summonerActions.replaceSummoner({
+        summonerInfo,
+      })
+    );
   };
 
-  const regionChangeHandler = (e) => {
-    setRegion(e.target.value);
+  const storeMatchIds = () => {
+    dispatch(
+      summonerActions.replaceMatchIds({
+        matchIds,
+      })
+    );
   };
 
   //this grabs the summoner ID which can be used to process info
@@ -51,20 +63,43 @@ const NewSummoner = (props) => {
       );
       const data = await response.json();
 
-      console.log(data.data);
+      // console.log(data);
+
       setSummonerFound(true);
-      if (!data.data) {
-        setSummonerFound(false);
-      }
-      console.log("fetched");
+
+      // console.log("fetched");
       setIsLoading(false);
 
       return data.data;
     } catch (err) {
+      setSummonerFound(false);
       setIsLoading(false);
       console.log(err);
     }
     setIsLoading(false);
+  };
+
+  const fetchMatchDetails = async () => {
+    // success temporarily disabled bc of match v4 disabled
+    // if (success) {
+    setMatchesLoading(true);
+
+    try {
+      const response = await fetch(
+        `/api/tft_match_details?puuid=${summonerInfoState.summonerInfo.puuid}`
+      );
+      const data = await response.json();
+
+      setMatchIds(data.matchIds);
+    } catch (err) {
+      console.log(err);
+    }
+    setMatchesLoading(false);
+    setMatchToggle(true);
+  };
+
+  const overviewButtonHandler = () => {
+    setMatchToggle(false);
   };
 
   //if url is /summonerName/matches then call this fn
@@ -75,34 +110,21 @@ const NewSummoner = (props) => {
     const data = await fetchSummoner();
     setSummonerInfo(data);
     try {
-      const matches = await fetch(
-        `/api/tft_matches?region=${region}&summonerId=${data.id}`
-      );
-      const matchData = await matches.json();
-      setMatchInfo(matchData);
-      setSuccess(true);
+      if (data.id) {
+        const matches = await fetch(
+          `/api/tft_matches?region=${region}&summonerId=${data.id}`
+        );
+        const matchData = await matches.json();
+        setMatchInfo(matchData);
+        setSuccess(true);
+      } else {
+        setSummonerFound(false);
+      }
     } catch (err) {
       setSuccess(false);
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    summonerBlurHandler();
-  }, []);
-
-  useEffect(() => {
-    setHasLoaded(true);
-  }, []);
-
-  useEffect(() => {
-    setRegion(props.region);
-    setSummonerName(props.summonerName);
-  }, [props.region, props.summonerName]);
-
-  useEffect(() => {
-    fetchMatches();
-  }, [hasLoaded, region]);
 
   const assignRankedInfo = useCallback(() => {
     let rankedFiltered = matchInfo.matchInfo.filter(function (obj) {
@@ -118,32 +140,141 @@ const NewSummoner = (props) => {
     setHyperRollInfo(hyperRollFiltered[0]);
   }, [matchInfo.matchInfo]);
 
-  const assignInfo = () => {
-    assignHyperRollInfo();
-    assignRankedInfo();
-  };
+  //   this makes it so that it will fetch the info on first load of page
+  useEffect(() => {
+    setHasLoaded(true);
+  }, []);
 
-  const logId = () => {
-    console.log(summonerName);
-    console.log(region);
-    console.log(summonerInfo);
-    console.log(matchInfo.matchInfo);
-    console.log(rankedTFTInfo);
-    console.log(hyperRollInfo);
-    console.log(success);
-  };
+  //this ensures page reloads component with URL info
 
+  useEffect(() => {
+    setRegion(summonerInfoState.routerRegion);
+    setSummonerName(summonerInfoState.routerSummoner);
+  }, [summonerInfoState.routerRegion, summonerInfoState.routerSummoner]);
+
+  //   this prevents it from trying to grab data when undefined, leading to the "NO SUMMONER FOUND" text.
+  useEffect(() => {
+    const loadNewUser = setTimeout(() => {
+      fetchMatches();
+    }, 1);
+    return () => clearTimeout(loadNewUser);
+  }, [hasLoaded, region]);
+
+  //   temporary, this will ensure correct hyperroll info passed
   useEffect(() => {
     assignHyperRollInfo();
   }, [assignHyperRollInfo, matchInfo]);
 
+  //   temporary, this will ensure correct ranked info passed
   useEffect(() => {
     assignRankedInfo();
   }, [assignRankedInfo, matchInfo]);
 
+  //   this ensures redux state is updated with new info
+  useEffect(() => {
+    if (success) {
+      summonerStateHandler();
+      //   fetchMatchDetails();
+    }
+  }, [success]);
+
+  useEffect(() => {
+    storeMatchIds();
+  }, [matchIds]);
+
   return (
     <>
-      <form onSubmit={fetchSummoner}>
+      <div className={styles.summonerInfoBox}>
+        {isLoading && <h1>Loading...</h1>}
+
+        <div className={styles.summonerInfo}>
+          <div className={styles.summonerNameContainer}>
+            <Image
+              src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summonerInfoState.summonerInfo.profileIconId}.jpg`}
+              width={100}
+              height={100}
+              alt={"Summoner Icon"}
+            ></Image>
+            <div>
+              <h1 className={styles.summonerName}>
+                {summonerName}
+                <div className={styles.pageButton}>
+                  <Button variant="contained" onClick={fetchMatchDetails}>
+                    matches
+                  </Button>
+                </div>
+              </h1>
+            </div>
+          </div>
+
+          {/* https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summonerInfoState.summonerInfo.profileIconId}.jpg */}
+
+          <div className={styles.statsBox}>
+            {success && rankedTFTInfo && rankedTftVisible && (
+              <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
+            )}
+            {/* {success && rankedTFTInfo && rankedTftVisible && (
+              <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
+            )} */}
+            {success && hyperRollInfo && hyperRollVisible && (
+              <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
+            )}
+          </div>
+          {hasLoaded && !summonerFound && !summonerInfoState.isLoading && (
+            <h1>Summoner not found! Did you select the correct region?</h1>
+          )}
+          {success && !rankedTFTInfo && !hyperRollInfo && (
+            <h1>No Ranked Info Found for {summonerName}!</h1>
+          )}
+        </div>
+      </div>
+      <div className={styles.matchesLoading}>
+        <h2>Match History</h2>{" "}
+        {matchesLoading && <CircularProgress></CircularProgress>}
+      </div>
+    </>
+  );
+};
+
+export default NewSummoner;
+
+// const toggleRanked = () => {
+//   setRankedTftVisible(!rankedTftVisible);
+// };
+// const toggleHyperRoll = () => {
+//   setHyperRollVisible(!hyperRollVisible);
+// };
+// const summonerBlurHandler = () => {
+//   setSummonerName(summonerRef.current.value);
+// };
+
+// const regionChangeHandler = (e) => {
+//   setRegion(e.target.value);
+// };
+
+// const assignInfo = () => {
+//   assignHyperRollInfo();
+//   assignRankedInfo();
+//   summonerStateHandler();
+// };
+
+// const logId = () => {
+//   console.log(summonerName);
+//   console.log(region);
+//   console.log(router.query);
+//   // console.log(summonerInfo);
+//   // console.log(matchInfo.matchInfo);
+//   // console.log(rankedTFTInfo);
+//   // console.log(hyperRollInfo);
+//   // console.log(success);
+
+//   console.log(summonerInfoState.summonerInfo);
+//   console.log(summonerInfoState.matchIds);
+//   console.log(summonerInfoState.routerSummoner);
+// };
+
+{
+  /* <form onSubmit={fetchSummoner}>
         <Box>
           <TextField
             id="input-with-sx"
@@ -176,44 +307,30 @@ const NewSummoner = (props) => {
             </Select>
           </FormControl>
         </Box>
-      </form>
-      <Button variant="contained" onClick={fetchSummoner}>
+      </form> */
+}
+
+{
+  /* <Button variant="contained" onClick={fetchMatches}>
         Click to fetch
-      </Button>
-      <Button variant="contained" onClick={fetchMatches}>
-        Click to fetch AGAIN
       </Button>
       <Button variant="contained" onClick={logId}>
         Click to log current info
-      </Button>
-      <Button variant="contained" onClick={summonerBlurHandler}>
+      </Button> */
+}
+{
+  /* <Button variant="contained" onClick={summonerBlurHandler}>
         Click to record summoner name
       </Button>
       <Button variant="contained" onClick={assignInfo}>
         Click to assign INFO
+      </Button> */
+}
+{
+  /* <Button variant="contained" onClick={toggleRanked}>
+        Toggle RANKED
       </Button>
-      {isLoading && <h1>Loading...</h1>}
-
-      {/* need to add conditional rendering here, cannot assume the player has played ranked queues */}
-      {/* use filter or map to separate them */}
-
-      {/* need to clear state after checking a new user so it doesnt display old stats */}
-      {success && rankedTFTInfo && (
-        <RankedStats matchInfo={rankedTFTInfo}></RankedStats>
-      )}
-      {success && hyperRollInfo && (
-        <HyperRollStats matchInfo={hyperRollInfo}></HyperRollStats>
-      )}
-
-      {!summonerFound && (
-        <h1>Summoner not found! Did you select the correct region?</h1>
-      )}
-
-      {success && !rankedTFTInfo && !hyperRollInfo && (
-        <h1>No Ranked Info Found!</h1>
-      )}
-    </>
-  );
-};
-
-export default NewSummoner;
+      <Button variant="contained" onClick={toggleHyperRoll}>
+        Toggle HYPERROLL
+      </Button> */
+}

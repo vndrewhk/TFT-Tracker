@@ -1,9 +1,10 @@
 import { CircularProgress } from "@mui/material";
-import { style } from "@mui/system";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import fetchCDragon from "../../pages/api/fetchCDragon";
 import styles from "./RenderSummonerNames.module.css";
+import goldIcon from "../assets/icons/ico-gold.png";
 const RenderSummonerNames = (props) => {
   const [sortedUserList, setSortedUserList] = useState([]);
   const [userList, setUserList] = useState([]);
@@ -13,6 +14,7 @@ const RenderSummonerNames = (props) => {
   const [unitPortraits, setUnitPortraits] = useState([]);
   const [unitsFetched, setUnitsFetched] = useState(false);
 
+  const summonerInfoState = useSelector((state) => state.summonerInfo);
   // when sortedUserList length === 8, trigger fn
   // fn will fetch all units from the game and store in object key value pair, {tft6_ahri:ASSETS/Characters/TFT6_Ahri/HUD/TFT6_Ahri.TFT_Set6_Stage2.dds}
   // then will use this data in a state to render in site
@@ -26,6 +28,7 @@ const RenderSummonerNames = (props) => {
     try {
       const response = await fetch(`/api/getByPUUID?puuid=${player.puuid}`);
       const userDetails = await response.json();
+      // console.log(userDetails);
       setUserList((prevState) => [
         ...prevState,
         { ...player, ...userDetails.userInfo },
@@ -58,7 +61,7 @@ const RenderSummonerNames = (props) => {
     sortPlayers();
   }, [sortPlayers, userList]);
 
-  console.log("render cycle");
+  // console.log("render cycle");
   useEffect(() => {
     grabAllSummoners();
   }, []);
@@ -93,20 +96,6 @@ const RenderSummonerNames = (props) => {
       // console.log(unitInfo.unitInfo[hash]);
       for (const key in unitInfo.unitInfo[hash]) {
         if (key === "PortraitIcon") {
-          // let unitName;
-          // unitName = unit;
-
-          // let unitUrl;
-          // // unitObj["unit"] = unit;
-          // unitUrl = `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
-          //   hash
-          // ][key]
-          //   .toLowerCase()
-          //   .replace("dds", "png")}`;
-          // // console.log(tempUnits.indexOf(unitObj));
-
-          // const unitObj = { unit, unitUrl };
-
           tempUnits = {
             ...tempUnits,
             [unit]: `https://raw.communitydragon.org/latest/game/${unitInfo.unitInfo[
@@ -118,11 +107,20 @@ const RenderSummonerNames = (props) => {
         }
       }
     }
-    // console.log(tempUnits);
-
+    tempUnits = {
+      ...tempUnits,
+      tft6_veigar: `https://raw.communitydragon.org/latest/game/assets/characters/tft6_veigar/hud/tft6_veigar_square.tft_set6.png`,
+    };
     setUnitPortraits(tempUnits);
     setUnitsLoaded(true);
   };
+
+  // i only need to fetch once in this case
+
+  // let tempItems = {};
+  // const itemHandler = async (item_id)=>{
+  //   const itemInfo = await fetchItemInfo(item_id)
+  // }
 
   if (sortedUserList.length === 8 && !unitsFetched) {
     console.log(sortedUserList[0].units);
@@ -139,33 +137,45 @@ const RenderSummonerNames = (props) => {
   const usersList = (
     <>
       {sortedUserList.map((user) => (
-        <p key={user.puuid}>
+        <div key={user.puuid}>
           {/* summoner names of each player */}
           <li className={styles.userList}>
-            <h4>
-              <span>{user.placement}</span> {user.gameName}#{user.tagLine}
+            <h4 className={styles["username"]} key={user.name}>
+              {/* we dont use #{user.tagLine} because api not provided from Riot */}
+              <span>{user.placement} - </span> {user.name}
               {/* onClick -> router.push(/{region}/{user.gameName}) */}
             </h4>
           </li>
 
           {/* general info */}
-          <p>Round: {user.last_round}</p>
-          <span>{user.gold_left} GOLD Remaining, </span>
-          <span>{user.total_damage_to_players} Damage Dealt</span>
-
+          {/* GOLD, LAST ROUND, TOTAL DAMAGE */}
+          <div className={styles["general-info"]}>
+            <span className={styles["last-round"]}>
+              Round: {user.last_round}
+            </span>
+            <span className={styles["gold-remaining"]}>
+              {user.gold_left}
+              <Image src={goldIcon} alt="Gold Icon"></Image>
+            </span>
+            {/* time alive */}
+            <span>Alive: {timeConverter(user.time_eliminated)}</span>
+            {/* <span>{user.total_damage_to_players} Damage Dealt</span> */}
+          </div>
           {/* augments used in game */}
-          <p className={styles.augmentContainer}>
-            {user.augments.map((augment) => (
-              <>
-                <p
-                  className={styles.augment}
-                  key={`${augment}_${user.gameName}_${user.augments.indexOf(
-                    augment
-                  )}`}
-                >
-                  {augment.replace("TFT6_Augment_", "").toLowerCase()}
-                </p>
-                {/* <Image
+          {user.augments && (
+            <p className={styles.augmentContainer}>
+              {user.augments.map((augment) => (
+                <>
+                  <p
+                    className={styles.augment}
+                    key={`${augment}_${user.name}_${user.augments.indexOf(
+                      augment
+                    )}`}
+                  >
+                    {/* {augment.replace("TFT6_Augment_", "").toLowerCase()} */}
+                    {augment}
+                  </p>
+                  {/* <Image
                   src={`https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/${augment
                     .replace("TFT6_Augment_", "")
                     .toLowerCase()}.tft_set6.png`}
@@ -173,34 +183,50 @@ const RenderSummonerNames = (props) => {
                   width={100}
                   height={100}
                 ></Image> */}
-              </>
-            ))}
-          </p>
+                </>
+              ))}
+            </p>
+          )}
 
           {/* traits active */}
           {/* https://raw.communitydragon.org/12.4/game/assets/maps/particles/tft/item_icons/augments/choiceui/celestialblessing1.tft_set6.png */}
-          <p className={styles.traitContainer}>
+          <div className={styles.traitContainer}>
             {user.traits.map((trait) => (
-              <p key={`${trait.name}_${user.gameName}`}>
+              <div key={`${trait.name}_${user.name}`}>
                 {/* convert this to icons */}
                 <p className={styles.trait}>
-                  Tier {trait.tier_total} {trait.name}
-                  <p className={styles.trait_unitCount}>
+                  {/* Tier {trait.tier_total} {trait.name} */}
+                  {/* <span className={styles.trait_unitCount}>
                     {trait.num_units} Units
-                  </p>
+                  </span> */}
+                  {/* {summonerInfoState.traitData[trait.name].icon} */}
+                  {summonerInfoState.traitData[trait.name] && (
+                    // on hover of this image, show the amount of units activated
+                    //  eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      // key={unit.character_id + user.units.indexOf(unit)}
+                      src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.traitData[
+                        trait.name
+                      ].icon
+                        .toLowerCase()
+                        .replace("tex", "png")}`}
+                      alt={trait.name}
+                      className={styles.traitPortrait}
+                    />
+                  )}
                 </p>
-              </p>
+              </div>
             ))}
-          </p>
+          </div>
 
           {/* units used */}
-          <p className={styles.unitContainer}>
+          <div className={styles.unitContainer}>
             {user.units.map((unit) => (
               <div
                 className={styles.unit}
-                key={`${unit.character_id}_${
-                  user.gameName
-                }_${user.units.indexOf(unit)}`}
+                key={`${unit.character_id}_${user.name}_${user.units.indexOf(
+                  unit
+                )}`}
               >
                 {!unitsLoaded && unit.character_id.toLowerCase()}
                 {/* return unitUrl of the object that matches unit:unit */}
@@ -208,39 +234,63 @@ const RenderSummonerNames = (props) => {
                 {Object.keys(unitPortraits).length > 2 && (
                   // <>{unitPortraits[unit.character_id.toLowerCase()]}</>
                   <div className={styles.unitBox}>
-                    <img
-                      src={unitPortraits[unit.character_id.toLowerCase()]}
-                      alt="Logo"
-                      className={styles.unitPortrait}
-                    />
-                    <p>{unit.character_id.split("_")[1]}</p>
-                  </div>
-                  // <Image
-                  //   src={unitPortraits[unit.character_id.toLowerCase()]}
-                  //   alt={unit.character_id}
-                  //   props = {unitPortraits[unit.character_id.toLowerCase()]}
-                  //   width={50}
-                  //   height={50}
-                  // ></Image>
-                )}
+                    <>
+                      {/* {unit.character_id} */}
 
-                {/* {unitImageHandler(unit.character_id.toLowerCase())} */}
-                {/* <Image
-                  src={`https://raw.communitydragon.org/latest/game/assets/characters/${unit.character_id.toLowerCase()}/hud/${unit.character_id.toLowerCase()}.tft_set6_stage2.png`}
-                  alt={unit.character_id}
-                  width={50}
-                  height={50}
-                ></Image> */}
+                      {/*  eslint-disable-next-line @next/next/no-img-element */}
+                      {unitPortraits[unit.character_id.toLowerCase()] && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={unit.character_id + user.units.indexOf(unit)}
+                          src={unitPortraits[unit.character_id.toLowerCase()]}
+                          alt={unit.character_id}
+                          // summonerInfoState.championData[unit.character_id].cost
+                          className={`${styles.unitPortrait} ${
+                            "champion-cost-" +
+                            summonerInfoState.championData[unit.character_id]
+                              .cost
+                          }`}
+                        />
+                      )}
+                    </>
+                    {/* could make this on hover instead */}
+                    <p className={styles.unitName}>
+                      {unit.character_id.split("_")[1]}
+                    </p>
+                    {/* if item has thieves gloves (id:99), do not iterate over the rest */}
+                    <div className={styles.itemBox}>
+                      {unit.items.map((item) => (
+                        <>
+                          {/* {item} */}
+                          {summonerInfoState.items[item] && (
+                            <>
+                              {/* {item} */}
+                              {/*  eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                key={
+                                  unit.items.indexOf(item) +
+                                  unit.character_id +
+                                  item
+                                }
+                                src={`https://raw.communitydragon.org/latest/game/${summonerInfoState.items[
+                                  item
+                                ].icon
+                                  .toLowerCase()
+                                  .replace("dds", "png")}`}
+                                alt="Logo"
+                                className={styles.itemPortrait}
+                              />
+                            </>
+                          )}
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
-          </p>
-
-          {/* time alive */}
-          <span>
-            <p>Time Eliminated</p>
-            <p>{timeConverter(user.time_eliminated)}</p>
-          </span>
-        </p>
+          </div>
+        </div>
       ))}
     </>
   );
@@ -252,29 +302,28 @@ const RenderSummonerNames = (props) => {
     console.log(userList.length);
     console.log(sortedUserList);
     console.log(unitPortraits);
+    let item = 3;
     // console.log(unitPortraits["tft6_ekko"]);
+    // console.log(
+    //   summonerInfoState.items.items[item].icon
+    //     .toLowerCase()
+    //     .replace("dds", "png")
+    // );
+    console.log(summonerInfoState.items);
     console.log(Object.keys(unitPortraits).length);
     // console.log(sortedUserList)
   };
 
   return (
-    <>
-      <button onClick={unitImageHandler.bind(null, "tft6_ahri")}>fetch</button>
-      {/* in the future, will be replaced by a component which shows icon/etc etc */}
+    <div>
       {sortedUserList.length == 8 ? (
         <ul className={styles.summonerBox}>{usersList}</ul>
       ) : (
         <CircularProgress></CircularProgress>
       )}
-      {/* <Image
-        src="https://raw.communitydragon.org/latest/game/assets/characters/tft6_nocturne/hud/tft6_nocturne.tft_set6_stage2.png"
-        alt="Picture of the author"
-        width={50}
-        height={50}
-      ></Image> */}
 
       <button onClick={logSummoners}>Log all summoners</button>
-    </>
+    </div>
   );
 };
 export default RenderSummonerNames;

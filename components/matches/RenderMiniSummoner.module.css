@@ -1,0 +1,51 @@
+.mini-match-preview {
+  display: flex;
+  justify-content: space-between;
+}
+
+.unitContainer {
+  display: flex;
+  flex-direction: row;
+}
+.unit {
+  flex-direction: row;
+}
+.unitBox {
+  display: flex;
+  flex-direction: column;
+}
+.unitPortrait {
+  width: 40px;
+  height: 40px;
+}
+
+.itemBox {
+  display: flex;
+  flex-direction: row;
+}
+.itemPortrait {
+  width: 15px;
+  height: 15px;
+}
+
+.mini-user-list {
+  align-items: flex-end;
+  justify-content: flex-end;
+  display: inline;
+  flex-direction: column;
+  width: 30%;
+  padding: 0;
+  column-count: 2;
+  flex-wrap: wrap;
+}
+
+.mini-user-column {
+  margin: 0%;
+  padding: 0%;
+}
+.mini-user {
+  margin: 0%;
+  padding: 0;
+  /* padding-left: 5px; */
+  font-size: 14px;
+}

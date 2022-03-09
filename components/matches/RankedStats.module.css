@@ -1,0 +1,23 @@
+.ranked-container {
+  border: 2px violet solid;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.ranked-tier {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.ranked-icon {
+  padding: 0px;
+  margin: 0px;
+}
+
+.win-loss {
+  display: flex;
+  width: 150px;
+  justify-content: space-between;
+}

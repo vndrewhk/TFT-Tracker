@@ -1,0 +1,23 @@
+.champion-cost-1 {
+  border: 3px solid #f2e5da;
+}
+
+.champion-cost-2 {
+  border: 3px solid #21a755;
+}
+
+.champion-cost-3 {
+  border: 3px solid #32c3d5;
+}
+
+.champion-cost-4 {
+  border: 3px solid #bb7df0;
+}
+
+.champion-cost-5 {
+  border: 3px solid #f2b42d;
+}
+
+body {
+  background-color: #D5E3FF;
+}
