@@ -1,5 +1,3 @@
-import NewSummoner from "../components/matches/NewSummoner";
-
 const HomePage = () => {
   return (
     <div>
