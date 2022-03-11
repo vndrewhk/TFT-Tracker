@@ -135,9 +135,9 @@ const RenderSummonerNames = (props) => {
   }
 
   const usersList = (
-    <>
+    <div>
       {sortedUserList.map((user) => (
-        <div key={user.puuid}>
+        <div className={styles.individualSummoner} key={user.puuid}>
           {/* summoner names of each player */}
           <li className={styles.userList}>
             <h4 className={styles["username"]} key={user.name}>
@@ -292,7 +292,7 @@ const RenderSummonerNames = (props) => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 
   // const summonerGameInfo = <>{usersList}</>;
@@ -322,7 +322,7 @@ const RenderSummonerNames = (props) => {
         <CircularProgress></CircularProgress>
       )}
 
-      <button onClick={logSummoners}>Log all summoners</button>
+      {/* <button onClick={logSummoners}>Log all summoners</button> */}
     </div>
   );
 };

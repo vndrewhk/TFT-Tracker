@@ -7,3 +7,11 @@
   padding: 0;
   margin: 0;
 }
+
+.miniMatchBox {
+  background-color: #b1efff;
+  border: 1px solid #31d6ff;
+  /* border-radius: 30px; */
+  padding: 15px;
+  margin-top: 5px;
+}

@@ -1,8 +1,10 @@
 .ranked-container {
-  border: 2px violet solid;
+  /* border: 2px violet solid; */
   display: flex;
   flex-direction: column;
   width: 500px;
+  background-color: #9abcff;
+  padding: 15px;
 }
 
 .ranked-tier {

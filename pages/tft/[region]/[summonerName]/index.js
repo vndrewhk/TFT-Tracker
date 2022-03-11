@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import NewSummoner from "../../../../components/matches/NewSummoner"
+import NewSummoner from "../../../../components/matches/NewSummoner";
 import IndividualMatch from "../../../../components/matches/IndividualMatch";
 import { useCallback, useEffect } from "react";
 import { summonerActions } from "../../../../apps/store/summonerInfoSlice";
-
+import styles from "../../../../components/styling/SummonerPage.module.css";
 const SummonerInfoPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -97,13 +97,15 @@ const SummonerInfoPage = () => {
         region={region}
         summonerName={summonerName}
       ></NewSummoner>
-      {summonerInfoState.matchIds && (
-        <>
-          {summonerInfoState.matchIds.map((id) => (
-            <IndividualMatch key={id} matchId={id}></IndividualMatch>
-          ))}
-        </>
-      )}
+      <div className={styles['match-history-container']}>
+        {summonerInfoState.matchIds && (
+          <>
+            {summonerInfoState.matchIds.map((id) => (
+              <IndividualMatch key={id} matchId={id}></IndividualMatch>
+            ))}
+          </>
+        )}
+      </div>
       {/* <button onClick={logItems}>Log items</button> */}
       {/* <IndividualMatch></IndividualMatch> */}
       {/* {summonerInfoState.success && <RenderMatchData></RenderMatchData>} */}

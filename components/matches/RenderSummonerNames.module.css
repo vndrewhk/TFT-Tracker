@@ -1,15 +1,25 @@
 .summonerBox {
-  border: 5px solid red;
-  padding-left: 2%;
+  /* border: 5px solid red; */
+  /* padding-left: 2%; */
+  padding-left: 0;
+  margin-top: 0;
+  /* border: 1px solid blue; */
 }
 
+.individualSummoner {
+  /* background-color: red; */
+  border-top: 1px solid #578fff;
+  padding-left: 15px;
+
+  margin-bottom: 5px;
+}
 .username {
   padding: 0%;
   margin: 5px;
 }
 
 .augmentContainer {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: flex;
   padding: 0px;
   margin: 0px;
@@ -21,7 +31,7 @@
 }
 
 .unitContainer {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   display: flex;
   padding: 0px;
   margin: 0px;
@@ -30,7 +40,7 @@
 
 .unit {
   padding-right: 0rem;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   min-width: 75px;
 }
 

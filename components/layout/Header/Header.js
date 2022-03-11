@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <div className={styles.header}>
       <Link href="/" passHref>
-        <Typography variant="h3">Home</Typography>
+        <Typography variant="h3">TFTracker</Typography>
       </Link>
       <HeaderRoutes></HeaderRoutes>
     </div>

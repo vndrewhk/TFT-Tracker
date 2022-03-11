@@ -62,7 +62,7 @@ const RenderMiniMatch = (props) => {
     convertData(matchData);
 
   return (
-    <div>
+    <div className ={styles.miniMatchBox}>
       <div className={styles["info-box"]}>
         {/* <p className={styles["general-info"]}>Date: {gameDate.toString()}</p> */}
         <p className={styles["general-info"]}>

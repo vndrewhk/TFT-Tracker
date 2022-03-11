@@ -229,7 +229,7 @@ const NewSummoner = (props) => {
         </div>
       </div>
       <div className={styles.matchesLoading}>
-        <h2>Match History</h2>{" "}
+        <h2 onClick={fetchMatchDetails}>Match History</h2>
         {matchesLoading && <CircularProgress></CircularProgress>}
       </div>
     </>
