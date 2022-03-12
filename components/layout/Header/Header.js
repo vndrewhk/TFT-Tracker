@@ -10,9 +10,11 @@ import "@fontsource/roboto/700.css";
 const Header = () => {
   return (
     <div className={styles.header}>
-      <Link href="/" passHref>
-        <Typography variant="h3">TFTracker</Typography>
-      </Link>
+      <div className={styles.logoName}>
+        <Link href="/" passHref>
+          <Typography variant="h3">TFTracker</Typography>
+        </Link>
+      </div>
       <HeaderRoutes></HeaderRoutes>
     </div>
   );

@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import styles from "./header-routes.module.css";
 import { Box } from "@mui/system";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   FormControl,
   InputLabel,
@@ -123,7 +124,7 @@ const HeaderRoutes = (props) => {
         onClick={redirectHandler}
         variant="contained"
       >
-        Search
+        <SearchIcon></SearchIcon>
       </Button>
     </div>
   );

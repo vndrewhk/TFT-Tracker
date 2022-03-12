@@ -1,7 +1,9 @@
+import MainPage from "../components/homepage/MainPage";
+
 const HomePage = () => {
   return (
     <div>
-    <h1>Please use the search bar above to search for users!</h1>
+      <MainPage></MainPage>
     </div>
   );
 };

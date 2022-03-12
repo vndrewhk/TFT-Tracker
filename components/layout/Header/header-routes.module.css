@@ -24,4 +24,6 @@
 
 .searchBox {
   display: flex;
+  align-items: center;
 }
+
